@@ -1,0 +1,417 @@
+n4d-server-plugins (0.124) xenial; urgency=high
+
+  * Added missing change in internal variables when reseting xid counters 
+  * llum import function tries to import every user even if it has to change 
+    its uidNumber. Folder owners will be fixed afterwards.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 13 Sep 2018 14:14:31 +0200
+
+n4d-server-plugins (0.123) xenial; urgency=high
+
+  * Added xid counter reset when deleting all users
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 12 Sep 2018 09:08:41 +0200
+
+n4d-server-plugins (0.122) xenial; urgency=high
+
+  * Improving import function. importing llum data may result in uid collisions
+  * Fixed password regeneration
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 12 Sep 2018 08:54:16 +0200
+
+n4d-server-plugins (0.121) xenial; urgency=high
+
+  * Ensuring utf8 encoding when converting from sqlite to json
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 07 Sep 2018 10:37:46 +0200
+
+n4d-server-plugins (0.120) xenial; urgency=high
+
+  * Fixed unicode error when reading password file
+  * Shileding password reading. One error won't make password list to fail
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 06 Sep 2018 09:02:29 +0200
+
+n4d-server-plugins (0.119.1) xenial; urgency=high
+
+  * Fixed syntax error
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 29 Jun 2018 10:15:57 +0200
+
+n4d-server-plugins (0.119) xenial; urgency=medium
+
+  * Fixing password loading in case file doesn't exit.
+  * Fixing exists_home_or_create function to support admins users
+  * Fixing restore_groups_folders in regenerate_net_files call
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 29 Jun 2018 09:28:06 +0200
+
+n4d-server-plugins (0.118) xenial; urgency=high
+
+  * Fixed variable name in PasswordManager
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 22 Mar 2018 12:17:05 +0100
+
+n4d-server-plugins (0.117) xenial; urgency=high
+
+  * Making sure /net/server-sync/var/lib/n4d exists when PasswordManager loads
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 22 Mar 2018 09:44:54 +0100
+
+n4d-server-plugins (0.116) xenial; urgency=high
+
+  * Fixing unescaped strings when calling bash commands.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 29 Jan 2018 16:59:30 +0100
+
+n4d-server-plugins (0.115) xenial; urgency=high
+
+  * Fixing utf-8 encoding when saving passwords
+  * Using shutil rmtree to delete old home directories.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 29 Jan 2018 14:32:01 +0100
+
+n4d-server-plugins (0.114) xenial; urgency=high
+
+  * sqlite file is removed only if json file has been written.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 13 Nov 2017 14:04:49 +0100
+
+n4d-server-plugins (0.113) xenial; urgency=high
+
+  * Minor changes
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 08 Nov 2017 16:45:21 +0100
+
+n4d-server-plugins (0.112) xenial; urgency=high
+
+  * Teachers passwords DB to json file instead of sqlite due to nfs locks
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 08 Nov 2017 14:28:38 +0100
+
+n4d-server-plugins (0.111) xenial; urgency=high
+
+  * Adding teachers passwords when importing llum users
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 10 Oct 2017 14:45:35 +0200
+
+n4d-server-plugins (0.110) xenial; urgency=high
+
+  * Adding user type info to llum export file (generic or itaca)
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 07 Sep 2017 10:25:34 +0200
+
+n4d-server-plugins (0.109) xenial; urgency=high
+
+  * Added retries to samba id query.
+  * PasswordManager ignores sqlite file if it's a slave with /net mounted via nfs.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 31 May 2017 13:03:13 +0200
+
+n4d-server-plugins (0.108) xenial; urgency=high
+
+  * Added uidNumber support for import/export users operations
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 02 May 2017 14:25:50 +0200
+
+n4d-server-plugins (0.107) xenial; urgency=medium
+
+  * Updated TeacherShareManager due to changes in TeacherShare and homework-harvester
+
+ -- Juanma Navarro Mañez <juanma1980@gmail.com>  Wed, 15 Mar 2017 12:00:46 +0100
+
+n4d-server-plugins (0.106) xenial; urgency=medium
+
+  * Fix roadmin creation and acls activation when restoring backups from <= 14
+
+ -- Juanma Navarro Mañez <juanma1980@gmail.com>  Fri, 15 Jul 2016 09:58:35 +0200
+
+n4d-server-plugins (0.105) xenial; urgency=medium
+
+  * Fix ipxeboot symlink when restoring a lliurex-backup created from 14.04 or previous lliurex versions.
+
+ -- Juanma Navarro Mañez <juanma1980@gmail.com>  Thu, 26 May 2016 09:49:42 +0200
+
+n4d-server-plugins (0.104) xenial; urgency=high
+
+  [ Hector Garcia Huerta ]
+  * Serialize threads on peter pan
+
+  [ Raul Rodrigo Segura ]
+  * 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 05 May 2016 09:56:06 +0200
+
+n4d-server-plugins (0.103) xenial; urgency=high
+
+  * First xenial release
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 02 Feb 2016 09:51:05 +0100
+
+n4d-server-plugins (0.102) trusty; urgency=high
+
+  *  Try catching homework harvester directory creation
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 17 Dec 2015 09:27:07 +0100
+
+n4d-server-plugins (0.101) trusty; urgency=high
+
+  * is_frozen_user works with any user now. Try except added as well
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 25 Nov 2015 09:05:56 +0100
+
+n4d-server-plugins (0.100) trusty; urgency=high
+
+  * moving ldap watch to servers in a master-slave configuration without data replication
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 20 Nov 2015 12:27:58 +0100
+
+n4d-server-plugins (0.99) trusty; urgency=high
+
+  * Removing chown from startups and from ldap watch
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 19 Nov 2015 09:41:12 +0100
+
+n4d-server-plugins (0.98) trusty; urgency=high
+
+  * Fixed password list.
+  * Restoring pwd db if it doesn't exist or file is empty
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 02 Oct 2015 12:43:57 +0200
+
+n4d-server-plugins (0.97) trusty; urgency=high
+
+  * Fixed possible setfacl leak
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 30 Sep 2015 12:37:09 +0200
+
+n4d-server-plugins (0.96) trusty; urgency=high
+
+  * Fixed possible chown leak
+  * PeterPan hooks are now threads
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 17 Sep 2015 14:44:19 +0200
+
+n4d-server-plugins (0.95.2) trusty; urgency=high
+
+  * Added read-only ldap admin queries
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 03 Sep 2015 09:17:33 +0200
+
+n4d-server-plugins (0.95.1) trusty; urgency=medium
+
+  * Restoring group perms to backup file
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 17 Jul 2015 13:34:28 +0200
+
+n4d-server-plugins (0.95) trusty; urgency=high
+
+  * Making sure ldap is alive in every query being made
+  * Non-gluster-replicating slave servers regenerate net files in every boot 
+  * Backup files are now owned by root:admins
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 17 Jul 2015 10:17:52 +0200
+
+n4d-server-plugins (0.94.9) trusty; urgency=high
+
+  * Updated version 
+
+ -- Angel Berlanas Vicente <angel.berlanas@gmail.com>  Thu, 16 Jul 2015 13:59:40 +0200
+
+n4d-server-plugins (0.94.8) trusty; urgency=medium
+
+  * Independent servers now connect to ldaps://localhost instead of via IP
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 26 May 2015 17:21:09 +0200
+
+n4d-server-plugins (0.94.7) trusty; urgency=high
+
+  * restored import_llum_info functionality
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 22 May 2015 14:54:37 +0200
+
+n4d-server-plugins (0.94.6) trusty; urgency=high
+
+  * Restored export_llum_info functionality
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 22 May 2015 12:55:52 +0200
+
+n4d-server-plugins (0.94.5) trusty; urgency=medium
+
+  * Work on backupmanager
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 15 Apr 2015 09:40:44 +0200
+
+n4d-server-plugins (0.94.4) trusty; urgency=medium
+
+  * get_student_list is anonymous
+  * backupmanager from precise
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 25 Feb 2015 17:54:58 +0100
+
+n4d-server-plugins (0.94.3) trusty; urgency=high
+
+  * Added import export support of ldap users in Golum and LdapManager
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 24 Feb 2015 08:31:16 +0100
+
+n4d-server-plugins (0.94.2) trusty; urgency=high
+
+  * Fixed EXTERNAL_INTERFACE variable name
+  * Added import export support of ldap users in Golum and LdapManager
+  
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 03 Feb 2015 16:38:08 +0100
+
+n4d-server-plugins (0.94.1) trusty; urgency=medium
+
+  * Added kernel module loading to iptablesmanager to support owners in iptables
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 03 Feb 2015 16:18:33 +0100
+
+n4d-server-plugins (0.94) trusty; urgency=high
+
+  * Adding IptablesManager plugin
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 03 Feb 2015 15:52:01 +0100
+
+n4d-server-plugins (0.93) trusty; urgency=medium
+
+  * Activating homework-harvester
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 17 Dec 2014 11:11:25 +0100
+
+n4d-server-plugins (0.92) trusty; urgency=medium
+
+  * removing user home dir when deleting user
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 02 Dec 2014 16:18:10 +0100
+
+n4d-server-plugins (0.91) trusty; urgency=medium
+
+  * get_user_list can be called anonymously
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 02 Dec 2014 16:04:04 +0100
+
+n4d-server-plugins (0.90.2) trusty; urgency=high
+
+  * changing service stop to invoke-rc.d 
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 27 Oct 2014 12:24:31 +0100
+
+n4d-server-plugins (0.90.1) trusty; urgency=high
+
+  * Added keep-skel dependency
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 06 Oct 2014 10:07:58 +0200
+
+n4d-server-plugins (0.90) trusty; urgency=high
+
+  * Fixed net home directories perms and acls
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 23 Sep 2014 18:11:38 +0200
+
+n4d-server-plugins (0.87) precise; urgency=high
+
+  * Added server backups plugin
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 19 Sep 2014 14:22:21 +0200
+
+n4d-server-plugins (0.86) precise; urgency=high
+
+  * Fixing homework harvester on semi clients 
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 29 May 2014 17:26:06 +0200
+
+n4d-server-plugins (0.85) precise; urgency=high
+
+  * Fixed PeterPan plugin. It now checks if hook directory exists
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 29 May 2014 13:10:05 +0200
+
+n4d-server-plugins (0.84.3) precise; urgency=high
+
+  * Added python-magic dependency
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 29 May 2014 13:08:15 +0200
+
+n4d-server-plugins (0.84.2) precise; urgency=high
+
+  * Added teachers to add_group and fixed duplicated add_generic_users rule
+  * Added support to encrypted xml files
+  * Fixed login function in golem
+  * Added NTicketsManager support to golem.login function
+  * Fixed possible error when searching ldapusers that don't use lliurex schemas
+  * Added fullsearch function
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 19 Nov 2013 12:10:06 +0100
+
+n4d-server-plugins (0.84.1) precise; urgency=high
+
+  * Adding option to delete/leave as-is user /net files when deleting an user.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 07 Nov 2013 17:41:32 +0100
+
+n4d-server-plugins (0.84) precise; urgency=high
+
+  * Added group share creation when importing gescen files
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 07 Nov 2013 09:59:49 +0100
+
+n4d-server-plugins (0.83) precise; urgency=high
+
+  * Added regeneration of groups when upgrading
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 06 Nov 2013 14:22:42 +0100
+
+n4d-server-plugins (0.82) precise; urgency=high
+
+  * Adding groups share functionality
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 14 Oct 2013 10:08:02 +0200
+
+n4d-server-plugins (0.81.9) precise; urgency=high
+
+  * Adding net files regeneration to golem
+  * Fixed utf8 encoding in homework harvester
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 02 Oct 2013 10:00:31 +0200
+
+n4d-server-plugins (0.81.8) precise; urgency=high
+
+  * Fixed get_students_passwords
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 30 Sep 2013 11:31:17 +0200
+
+n4d-server-plugins (0.81.7) precise; urgency=high
+
+  * Connection to Ldap is now dynamic. It should seemlessly connect to the best available Ldap server,
+     that is connecting to the Master server ldap if available.
+  * Gescen importation does its best effort to add users regardless of errors
+  * Fixed partial importation
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 13 Sep 2013 12:46:00 +0200
+
+n4d-server-plugins (0.81.6) precise; urgency=high
+
+  * Master-slave support in LdapManager
+  * Fixed deleting error in LdapManager
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 02 Sep 2013 11:46:26 +0200
+
+n4d-server-plugins (0.81.3) precise; urgency=low
+
+  * fixed next_xgid bug
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 25 Jul 2013 13:24:35 +0200
+
+n4d-server-plugins (0.81.2.1) precise; urgency=high
+
+  * ppa reupload
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 25 Jul 2013 13:23:41 +0200
+
+n4d-server-plugins (0.81.2) precise; urgency=low
+
+  * First stand-alone source
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 23 Jul 2013 11:15:17 +0200

@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -e
+FILESECRET="/etc/n4d/key"
+CERTPATH="/etc/n4d/cert/"
+CERTNAME="n4d"
+case "$1" in
+   configure)
+   
+	if dpkg --compare-versions "$2" lt 0.83; then
+		echo "Generating group share..."
+		n4d-modules enable-plugin /etc/n4d/conf.d/golem || true
+		n4d-client -r -m restore_groups_folders -c Golem || true
+		
+	fi
+   
+   
+   
+	#invoke-rc.d n4d stop || true
+	#invoke-rc.d n4d start || true
+	systemctl stop n4d || true
+	systemctl start n4d || true
+	
+	
+   ;;
+
+   abort-upgrade|abort-remove|abort-deconfigure)
+   ;;
+
+   *)
+       exit 1
+   ;;
+esac
+
+#DEBHELPER#
+
+exit 0
+

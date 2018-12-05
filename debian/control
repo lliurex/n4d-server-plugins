@@ -1,0 +1,14 @@
+Source: n4d-server-plugins
+Section: misc
+Priority: standard
+Maintainer: Equipo LliureX <lliurex@gva.es>
+Uploaders: Angel Berlanas Vicente <aberlanas.gva@gmail.com>
+Build-Depends: debhelper (>= 8)
+Standards-Version: 3.9.5
+
+Package: n4d-server-plugins
+Architecture: all
+Pre-Depends: n4d (>= 0.83)
+Depends: ${shlibs:Depends}, ${misc:Depends}, python, python-ldap, python-smbpasswd, python-magic, keep-skel
+Description:  n4d server plugins
+ This package contains n4d plugins for lliurex servers 

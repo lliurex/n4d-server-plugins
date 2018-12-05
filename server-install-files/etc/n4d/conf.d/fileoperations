@@ -1,0 +1,7 @@
+[SETUP]
+type=python
+path=FileOperations.py
+class=FileOperations
+[METHODS]
+get_file_from_server=admin,admins,teachers
+send_file_to_server=admin,admins,teachers

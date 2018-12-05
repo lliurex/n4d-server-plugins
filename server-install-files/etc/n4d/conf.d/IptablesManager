@@ -1,0 +1,9 @@
+[SETUP]
+type=python
+path=IptablesManager.py
+class=IptablesManager
+[METHODS]
+block=adm,admins,teachers
+unblock=adm,admins,teachers
+is_blocked=adm,admins,teachers
+blocked_list=adm,admins,teachers

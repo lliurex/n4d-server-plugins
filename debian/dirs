@@ -1,2 +1,4 @@
 /etc/skel-net/Desktop
 /etc/skel-net/Documents
+/usr/share/n4d/hooks/gesitamanager
+/usr/share/n4d/hooks/golem

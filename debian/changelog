@@ -1,3 +1,10 @@
+n4d-server-plugins (0.130) bionic; urgency=medium
+
+  * Ported to Bionic
+  * Add keep-skel files
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 05 Dec 2018 13:18:20 +0100
+
 n4d-server-plugins (0.124) xenial; urgency=high
 
   * Added missing change in internal variables when reseting xid counters 

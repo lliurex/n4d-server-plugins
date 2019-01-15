@@ -1151,8 +1151,8 @@ class LdapManager:
 		students="cn=students,ou=Profiles,ou=Groups," + self.llxvar("LDAP_BASE_DN")
 		others="cn=others,ou=Profiles,ou=Groups," + self.llxvar("LDAP_BASE_DN")
 		user_path="uid="+user.uid+",ou="+plantille+",ou=People," + self.llxvar("LDAP_BASE_DN")
-		teachers_groups=["dialout","cdrom","floppy","audio","dip","video","plugdev","netdev","vboxusers","fuse","epoptes"]
-		students_groups=["dialout","cdrom","floppy","audio","dip","video","plugdev","netdev","vboxusers","fuse"]
+		teachers_groups=["dialout","cdrom","floppy","audio","dip","video","plugdev","netdev","vboxusers","fuse","epoptes","bluetooth"]
+		students_groups=["dialout","cdrom","floppy","audio","dip","video","plugdev","netdev","vboxusers","fuse","bluetooth"]
 		
 		if(plantille=="Teachers"):
 			

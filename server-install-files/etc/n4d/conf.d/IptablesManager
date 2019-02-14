@@ -3,7 +3,7 @@ type=python
 path=IptablesManager.py
 class=IptablesManager
 [METHODS]
-block=adm,admins,teachers
-unblock=adm,admins,teachers
-is_blocked=adm,admins,teachers
-blocked_list=adm,admins,teachers
+block=sudo,admins,teachers
+unblock=sudo,admins,teachers
+is_blocked=sudo,admins,teachers
+blocked_list=sudo,admins,teachers

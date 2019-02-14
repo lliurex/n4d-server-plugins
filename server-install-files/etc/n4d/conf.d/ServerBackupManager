@@ -3,8 +3,8 @@ type=python
 path=ServerBackupManager.py
 class=ServerBackupManager
 [METHODS]
-backup=adm,admins,admin
-restore=adm,admins,admin
-server_basics_backup=adm,admins,admin
-server_basics_restore=adm,admins,admin
+backup=sudo,admins,admin
+restore=sudo,admins,admin
+server_basics_backup=sudo,admins,admin
+server_basics_restore=sudo,admins,admin
 get_basic_services_list=anonymous

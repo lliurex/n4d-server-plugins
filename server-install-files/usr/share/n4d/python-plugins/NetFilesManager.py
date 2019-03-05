@@ -122,7 +122,7 @@ class NetFilesManager:
 		else:
 			if mode==0:
 				#os.system("chown -R " + uid + ":nogroup '" + pipes.quote(nethome) + "'")
-				command='chown -R ' + uid + ':nogroup "' + nethome + '"'
+				command='chown -R "' + uid + '":nogroup "' + nethome + '"'
 				os.system(command)
 		return False
 

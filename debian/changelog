@@ -1,3 +1,9 @@
+n4d-server-plugins (0.133) bionic; urgency=high
+
+  * supporting spaces in user names
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 05 Mar 2019 17:23:33 +0100
+
 n4d-server-plugins (0.132) bionic; urgency=medium
 
   * Adding sudo group

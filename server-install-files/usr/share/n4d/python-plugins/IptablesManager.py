@@ -8,7 +8,7 @@ class IptablesManager:
 		os.system("modprobe ipt_owner")
 		
 		self.iptables_tc_skel="iptables -%s OUTPUT -o %s -m owner --uid-owner %s -m comment --comment N4D_IPTABLES_TC -j DROP"
-		self.iptables_fc_skel="iptables -%s INPUT -s %s  -p tcp --dport 3128 -m comment --comment N4D_IPTABLES_FC -j DROP"
+		self.iptables_fc_skel="iptables -%s FORWARD -s %s  -p tcp ! -d 10.0.0.0/8 -m comment --comment N4D_IPTABLES_FC -j DROP"
 		self.blocked_list={}
 		
 	#def init
@@ -30,7 +30,7 @@ class IptablesManager:
 				'''
 				# 
 				
-				cmd=self.iptables_tc_skel%("A",eth,user)
+				cmd=self.iptables_tc_skel%("I",eth,user)
 				os.system(cmd)
 			
 			return 0
@@ -38,7 +38,7 @@ class IptablesManager:
 		#fat
 
 		if ip not in self.blocked_list:
-			cmd=self.iptables_fc_skel%("A",ip)
+			cmd=self.iptables_fc_skel%("I",ip)
 			os.system(cmd)
 		
 		return 1

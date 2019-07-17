@@ -1,3 +1,9 @@
+n4d-server-plugins (0.134) bionic; urgency=medium
+
+  * Allow to lock internet connection on epoptes clients
+
+ -- M.Angel Juan <m.angel.juan@gmail.com>  Wed, 17 Jul 2019 10:27:29 +0200
+
 n4d-server-plugins (0.133) bionic; urgency=high
 
   * supporting spaces in user names

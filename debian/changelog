@@ -1,3 +1,11 @@
+n4d-server-plugins (0.135) bionic; urgency=medium
+
+  * Itaca files sometimes have bad encoding and are detected as data stream
+    instead of an xml file. Golem.py double checks the file looking for a
+    valid xml header.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 19 Aug 2019 09:18:43 +0200
+
 n4d-server-plugins (0.134) bionic; urgency=medium
 
   * Allow to lock internet connection on epoptes clients

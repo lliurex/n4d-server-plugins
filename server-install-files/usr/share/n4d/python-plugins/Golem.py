@@ -789,9 +789,19 @@ class Golem:
 			if self.mime.file(server_path).split(";")[0]=="application/xml":
 				pass
 			elif self.mime.file(server_path).split(";")[0]=="application/octet-stream":
-				if passwd=="":
+				# some itaca files have bad character encryption and are detected as data stream
+				# so we give the file yet another chance to be a valid xml file
+				f=open(server_path)
+				line=f.readline()
+				f.close()
+				is_xml=False
+				if line.startswith("<?xml version"):
+					# smells like an xml file? let's give it a chance
+					is_xml=True
+
+				if passwd=="" and not is_xml:
 					return "false:xml_encrypted"
-				else:
+				elif passwd!="" and not is_xml:
 					p=subprocess.Popen(["openssl","enc","-des","-d","-k",passwd,"-in",server_path,"-out",server_path+".xml"],stderr=subprocess.PIPE)
 					output=p.communicate()[1]
 					if output!=None:

@@ -1,3 +1,9 @@
+n4d-server-plugins (0.136) bionic; urgency=medium
+
+  * Sorting teacher list
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 05 Sep 2019 10:12:05 +0200
+
 n4d-server-plugins (0.135) bionic; urgency=medium
 
   * Itaca files sometimes have bad encoding and are detected as data stream

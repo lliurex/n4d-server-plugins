@@ -730,7 +730,7 @@ class Golem:
 		for item in tmp_teachers:
 			final_ret.append(tmp_teachers[item])
 			
-		return final_ret
+		return self.quicksort(final_ret)
 		
 	#def get_teachers_passwords
 	

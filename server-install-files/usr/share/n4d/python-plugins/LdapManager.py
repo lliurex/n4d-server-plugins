@@ -412,7 +412,8 @@ class LdapManager:
 	def generate_ssha_password(self,password):
 		
 		salt=self.getsalt()
-		return "{SSHA}" + base64.encodestring(hashlib.sha1(str(password) + salt).digest() + salt)
+		ret="{SSHA}" + base64.b64encode(hashlib.sha1(str(password) + salt).digest() + salt)
+		return ret
 		
 	#def generate_ssha_password	
 	

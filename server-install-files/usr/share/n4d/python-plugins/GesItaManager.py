@@ -241,11 +241,11 @@ class GesItaManager:
 		
 			if typeuser == 'Students':
 				if 'nif' in user.attributes:
-					prop['x-lliurex-nif'] = nif
+					prop['x-lliurex-nif'] = user.attributes["nif"]
 					prop['x-lliurex-usertype'] = 'gescen'
 
 				if 'nia' in user.attributes:
-					prop['x-lliurex-nia'] = nia
+					prop['x-lliurex-nia'] = user.attributes["nia"]
 					prop['x-lliurex-usertype'] = 'itaca'
 				else:
 					prop['x-lliurex-usertype'] = 'gescen'

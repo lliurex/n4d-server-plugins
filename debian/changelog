@@ -1,3 +1,9 @@
+n4d-server-plugins (0.138) bionic; urgency=medium
+
+  * Fixing nia storage
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 14 Oct 2019 16:51:21 +0200
+
 n4d-server-plugins (0.137) bionic; urgency=medium
 
   * Removing newline from ssha password generaiton

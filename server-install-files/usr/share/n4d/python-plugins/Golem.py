@@ -1025,6 +1025,11 @@ class Golem:
 					exported_users[item["uid"]]["x-lliurex-usertype"]=item["x-lliurex-usertype"]
 				else:
 					exported_users[item["uid"]]["x-lliurex-usertype"]="generic"
+					
+				if "x-lliurex-nia" in item:
+					exported_users[item["uid"]]["x-lliurex-nia"]=item["x-lliurex-nia"]
+				if "x-lliurex-nif" in item:
+					exported_users[item["uid"]]["x-lliurex-nif"]=item["x-lliurex-nif"]
 
 
 			for item in pwd_list:
@@ -1119,6 +1124,11 @@ class Golem:
 					properties["x-lliurex-usertype"]=exported_info["users"][uidn]["x-lliurex-usertype"]
 				else:
 					properties["x-lliurex-usertype"]="generic"
+					
+				if "x-lliurex-nia" in exported_info["users"][uidn]:
+					properties["x-lliurex-nia"]=exported_info["users"][uidn]["x-lliurex-nia"]
+				if "x-lliurex-nif" in exported_info["users"][uidn]:
+					properties["x-lliurex-nif"]=exported_info["users"][uidn]["x-lliurex-nif"]
 
 				profile=exported_info["users"][uidn]["profile"]
 				

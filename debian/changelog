@@ -1,3 +1,9 @@
+n4d-server-plugins (0.139) bionic; urgency=medium
+
+  * Exporting and importing nia via llum import/export option
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 15 Oct 2019 09:31:54 +0200
+
 n4d-server-plugins (0.138) bionic; urgency=medium
 
   * Fixing nia storage

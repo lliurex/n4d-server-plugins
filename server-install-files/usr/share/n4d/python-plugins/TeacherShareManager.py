@@ -49,7 +49,7 @@ class TeacherShareManager:
 				shutil.rmtree(tmp+"/."+user+"_"+n)
 			except Exception as e:
 				# folder might not exist
-				print e
+				print(e)
 				
 		for item in os.listdir(tmp):
 			if item.find("/."+user)==0:
@@ -72,7 +72,7 @@ class TeacherShareManager:
 			
 		except Exception as e:
 			
-			print e
+			print(e)
 			
 			if user in self.paths:
 				self.paths.pop(uid)

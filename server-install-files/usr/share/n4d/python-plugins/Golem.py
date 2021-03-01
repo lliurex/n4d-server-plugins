@@ -54,7 +54,7 @@ class Golem:
 			'''
 			
 		except Exception as e:
-			print e
+			print(e)
 		
 	#def __init__
 	
@@ -102,7 +102,7 @@ class Golem:
 					notifier.read_events()
 				
 			except Exception as e:
-				print e
+				print(e)
 				notifier.stop()
 					
 		return False
@@ -816,7 +816,7 @@ class Golem:
 						
 			
 		except Exception as e:
-			print e
+			print(e)
 			return "false:send_error"
 		if ret==1:
 			try:
@@ -870,7 +870,7 @@ class Golem:
 		try:
 			self.sharefunctions['generate_uid'] = generate_uid
 		except Exception as e:
-			print e
+			print(e)
 			raise e
 
 		ret,users_added=self.itaca.full_import()
@@ -1268,7 +1268,7 @@ class Golem:
 							print("Adding user %s to group %s..."%(i,group))
 							self.add_to_group(i,group)
 					except Exception as e:
-						print e
+						print(e)
 						pass
 						
 					
@@ -1286,7 +1286,7 @@ class Golem:
 			return[True,]
 			
 		except Exception as e:
-			print e
+			print(e)
 			return [False,str(e)]
 		
 	#def import_llum_info

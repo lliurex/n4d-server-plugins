@@ -138,9 +138,12 @@ if __name__=="__main__":
 	
 	im=IptablesManager()
 	im.get_iptables_list()
-	print
 	for item in im.blocked_list:
-		print "[%s]"%item
+		print("[%s]"%item)
 		for item2 in im.blocked_list[item]:
-			print "\t[%s] = %s "%(item2,im.blocked_list[item][item2])
-		print 
+			print("\t[%s] = %s "%(item2,im.blocked_list[item][item2]))
+		
+		
+		
+		
+		

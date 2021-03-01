@@ -26,35 +26,6 @@ LDAP_LOG="/var/log/n4d/ldap"
 #uid=pepe,ou=Admins,ou=People,dc=ma5,dc=lliurex,dc=net
 #lliurex
 
-def getLliurexVariables():
-	
-	try:
-	
-		p1=subprocess.Popen(["llxcfg-listvars","--values"],stdout=subprocess.PIPE)
-		
-		output=p1.communicate()[0]
-		output=output.replace("'","")		
-
-		tmp1=output.split(';\n')
-
-		dic={}
-
-		for item in tmp1:
-			tmp2=item.split('=',1)
-				
-			if len(tmp2)>1:
-				dic[tmp2[0]]=tmp2[1]	
-				
-	except:
-		dic={}
-		dic["LDAP_BASE_DN"]="dc=ma5,dc=lliurex,dc=net"
-
-	return dic
-
-
-
-
-
 
 class GescenItem:
 	
@@ -205,8 +176,6 @@ class LdapManager:
 		self.restore_connection=True
 		self.reset_connection_variable()
 		self.get_samba_id()
-		
-		#self.getLliurexVariables()
 		
 		try:
 			self.connect()
@@ -583,7 +552,7 @@ class LdapManager:
 					url="ldap://"+url
 					remote=True
 			except Exception as e:
-				print(e,"")
+				print((e,""))
 			
 			do_it=True
 			
@@ -594,7 +563,7 @@ class LdapManager:
 					url="ldaps://localhost"
 					count=1
 				except Exception as e:
-					print(e,"")
+					print((e,""))
 					return None
 					
 			else:
@@ -634,11 +603,11 @@ class LdapManager:
 					
 					
 				except Exception as l_ex:
-					print l_ex
+					print(l_ex)
 					try:
 						url=self.llxvar("CLIENT_LDAP_URI")
 					except Exception as e:
-						print(e,"")
+						print((e,""))
 						return None
 						
 			print("[LDAPMANAGER] Error connecting to ldap")
@@ -1015,16 +984,11 @@ class LdapManager:
 		path="uid="+uid+","+students
 		try:
 			mod_list=[]
-			#print "per que 0"
 			mod=( ldap.MOD_REPLACE, "x-lliurex-usertype", "itaca" )
-			#print "per que 1"
 			mod_list.append(mod)
-			#print "per que"
 			mod=( ldap.MOD_ADD, "x-lliurex-nia", str(nia) )
 			mod_list.append(mod)
-			#print "vamos a ver"
 			self.ldap.modify_s(path,mod_list)
-			#print "okay makey"
 			return "true"
 			
 		except Exception as e:
@@ -1090,7 +1054,6 @@ class LdapManager:
 					password=pwd
 					generated_pwd=password
 				else:
-					#print "No password was given"
 					break
 				
 			if(pwd_generation_type==LdapManager.PASS_EQUALS_USER):
@@ -1375,7 +1338,7 @@ class LdapManager:
 						d[path][key]=info[key]
 					
 				except Exception as e:
-					print path,e
+					print((path,e))
 					if "exception" not in d[path]:
 						d[path]["exception"]=[]
 					d[path]["exception"].append(str(e))

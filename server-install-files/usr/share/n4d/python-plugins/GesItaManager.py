@@ -149,7 +149,7 @@ class GesItaManager:
 		try:
 			self.usersfordelete = self.golem.ldap.search_user_with_filter(filter)
 		except Exception as e:
-			print e
+			print(e)
 			raise e
 		
 		for nomgroup,group in self.groups.items():
@@ -266,7 +266,7 @@ class GesItaManager:
 					inserteduser= self.golem.ldap.add_user(False,typeuser,prop)
 
 			except Exception as e:
-				print e 
+				print(e)
 				return False
 				
 			

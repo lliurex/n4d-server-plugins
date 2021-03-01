@@ -70,18 +70,18 @@ class ClientManager:
 		while True:
 			
 			checking_time=time.mktime(time.localtime())
-			print ""
-			print "[ClientManager] Checking client list... [" + str(checking_time) + "]"
+			print("")
+			print("[ClientManager] Checking client list... [" + str(checking_time) + "]")
 			
 			for client in self.clients:
-				print "\t* " + client.user + ", from ip: " + client.ip
+				print("\t* " + client.user + ", from ip: " + client.ip)
 				if client.last_sol + CLIENT_MANAGER_SLEEP_TIME < checking_time:
-					print "\t\t[!] Last sign of life expired. Removing from list..."
-					print "\t\t" + str(client.last_sol+CLIENT_MANAGER_SLEEP_TIME) + " < " + str(checking_time)
+					print("\t\t[!] Last sign of life expired. Removing from list...")
+					print("\t\t" + str(client.last_sol+CLIENT_MANAGER_SLEEP_TIME) + " < " + str(checking_time))
 					self.clients.remove(client)
 					
 					if client.user in objects["TeacherShareManager"].get_paths():
-						print "\t\tRemoving shared folder from TeacherShareManager service..."
+						print("\t\tRemoving shared folder from TeacherShareManager service...")
 						objects["TeacherShareManager"].remove_path(client.user)
 					
 				

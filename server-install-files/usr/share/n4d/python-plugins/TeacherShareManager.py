@@ -65,8 +65,8 @@ class TeacherShareManager:
 			teacher_gid=pwd.getpwnam(user)[3]			
 			os.chown(tmp,teacher_uid,teacher_gid)
 			os.chown(dir,teacher_uid,teacher_gid)
-			os.chmod(tmp,0703)
-			os.chmod(dir,0703)
+			os.chmod(tmp,0o703)
+			os.chmod(dir,0o703)
 			os.umask(prevmask)		
 			return True
 			

@@ -18,6 +18,8 @@ import syslog
 import os
 import os.path
 
+import n4d.server
+
 
 base_home_dir="/home/"
 
@@ -176,6 +178,7 @@ class LdapManager:
 		self.restore_connection=True
 		self.reset_connection_variable()
 		self.get_samba_id()
+		self.core=n4d.server.Core.get_core()
 		
 		try:
 			self.connect()
@@ -273,6 +276,7 @@ class LdapManager:
 			mod_list=[]
 			mod_list.append(mod)
 			path="ou="+ou+",ou=People," + self.llxvar("LDAP_BASE_DN")
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			self.xid_counters[ou]=str(value)
 			return [True,str(value)]
@@ -292,6 +296,7 @@ class LdapManager:
 		mod_list.append(mod)
 		path="ou="+ou+",ou=People," + self.llxvar("LDAP_BASE_DN")
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			self.xid_counters[ou]=str(value)
 			return True
@@ -313,6 +318,7 @@ class LdapManager:
 			mod_list=[]
 			mod_list.append(mod)
 			path="ou=Managed,ou=Groups," + self.llxvar("LDAP_BASE_DN")
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			self.xgid_counter=str(value)
 			return [True,str(value)]
@@ -342,7 +348,7 @@ class LdapManager:
 		
 			try:
 				pprocess = subprocess.Popen(['net','getlocalsid'],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-				sambaid = pprocess.communicate()[0]
+				sambaid = pprocess.communicate()[0].decode("utf-8")
 				aux = sambaid.split(":")[1]
 				self.samba_id = aux[1:len(aux)-1]
 				self.get_samba_id_first_run=True
@@ -386,23 +392,6 @@ class LdapManager:
 		
 	#def generate_ssha_password	
 	
-	
-	def getLliurexVariables(self):
-		
-		p1=subprocess.Popen(["llxcfg-listvars","--values"],stdout=subprocess.PIPE)
-		
-		output=p1.communicate()[0]
-		output=output.replace("'","")		
-
-		tmp1=output.split(';\n')
-		
-		for item in tmp1:
-			tmp2=item.split('=',1)
-			
-			if len(tmp2)>1:
-				self.llxvar[tmp2[0]]=tmp2[1]		
-		
-	# getLliurexVariables
 	
 	
 	def generate_uid(self,name,surname):
@@ -851,7 +840,7 @@ class LdapManager:
 		mod_list=[]
 		mod_list.append(mod)
 		path="cn="+cn+",ou=Variables," + self.llxvar("LDAP_BASE_DN")
-		
+		mod_list=self.core.str_to_bytes(mod_list)
 		self.ldap.modify_s(path,mod_list)		
 		
 	#def update_user_count_variable
@@ -877,6 +866,7 @@ class LdapManager:
 		mod_list=[]
 		mod_list.append(mod)
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
@@ -895,6 +885,7 @@ class LdapManager:
 		mod_list.append(mod)                      
 		path="cn="+gid+",ou=Managed,ou=Groups," + self.llxvar("LDAP_BASE_DN")
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
@@ -915,6 +906,7 @@ class LdapManager:
 		mod_list.append(mod)
 		path="uid="+uid+","+ "ou=Students,ou=People," + self.llxvar("LDAP_BASE_DN")
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
@@ -935,6 +927,7 @@ class LdapManager:
 		mod_list.append(mod)
 		path="uid="+uid+","+ "ou=Students,ou=People," + self.llxvar("LDAP_BASE_DN")
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
@@ -952,8 +945,10 @@ class LdapManager:
 		try:
 			password=unicode(password).encode("utf-8")
 			if path.find("Students")!=-1:
+				#str_to_bytes
 				self.modify_value(path,"userPassword",password)
 			else:
+				#str_to_bytes
 				self.modify_value(path,"userPassword",self.generate_ssha_password(password))
 				
 			self.modify_value(path,"sambaNTPassword",smbpasswd.nthash(password))
@@ -988,6 +983,7 @@ class LdapManager:
 			mod_list.append(mod)
 			mod=( ldap.MOD_ADD, "x-lliurex-nia", str(nia) )
 			mod_list.append(mod)
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 			
@@ -1010,6 +1006,7 @@ class LdapManager:
 			mod_list.append(mod)
 			mod=( ldap.MOD_ADD, "x-lliurex-nif",str(nif) )
 			mod_list.append(mod)
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 			
@@ -1124,12 +1121,14 @@ class LdapManager:
 			mod2=(ldap.MOD_ADD,'memberUid',user.uid)
 			mod_list.append(mod2)
 			try:
+				mod_list=self.core.str_to_bytes(mod_list)
 				self.ldap.modify_s(teachers,mod_list)
 				for group in teachers_groups:
 					mod=(ldap.MOD_ADD,"memberUid",user.uid)
 					mod_list=[]
 					mod_list.append(mod)
 					group_path="cn=" + group +",ou=System,ou=Groups," + self.llxvar("LDAP_BASE_DN")
+					mod_list=self.core.str_to_bytes(mod_list)
 					self.ldap.modify_s(group_path,mod_list)
 					
 				teachers_groups.append("teachers")
@@ -1151,6 +1150,7 @@ class LdapManager:
 			mod_list.append(mod2)
 
 			try:
+				mod_list=self.core.str_to_bytes(mod_list)
 				self.ldap.modify_s(students,mod_list)
 				
 				for group in students_groups:
@@ -1158,6 +1158,7 @@ class LdapManager:
 					mod_list=[]
 					mod_list.append(mod)
 					group_path="cn=" + group +",ou=System,ou=Groups," + self.llxvar("LDAP_BASE_DN")
+					mod_list=self.core.str_to_bytes(mod_list)
 					self.ldap.modify_s(group_path,mod_list)
 				
 				students_groups.append("students")
@@ -1176,13 +1177,14 @@ class LdapManager:
 			mod_list.append(mod)
 			
 			try:
-				
+				mod_list=self.core.str_to_bytes(mod_list)
 				self.ldap.modify_s(others,mod_list)
 				for group in students_groups:
 					mod=(ldap.MOD_ADD,"memberUid",user.uid)
 					mod_list=[]
 					mod_list.append(mod)
 					group_path="cn=" + group +",ou=System,ou=Groups," + self.llxvar("LDAP_BASE_DN")
+					mod_list=self.core.str_to_bytes(mod_list)
 					self.ldap.modify_s(group_path,mod_list)
 					
 				students_groups.append("others")
@@ -1209,6 +1211,7 @@ class LdapManager:
 			
 		print("*** ADDING " + uid + " to " + path)
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
@@ -1233,6 +1236,7 @@ class LdapManager:
 		
 		#print "*** ADDING " + uid + " to admins"
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
@@ -1260,6 +1264,7 @@ class LdapManager:
 		
 		#print "*** DELETING " + uid + " from admins"
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
@@ -1776,6 +1781,7 @@ class LdapManager:
 		mod=(ldap.MOD_DELETE,"memberUid",uid)
 		mod_list.append(mod)
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 		except Exception as e:
 			self.log("del_student_from_student_group",e,uid)
@@ -1794,6 +1800,7 @@ class LdapManager:
 		mod=(ldap.MOD_DELETE,"memberUid",uid)
 		mod_list.append(mod)
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 		except Exception as e:
 			self.log("del_teacher_from_teacher_group",e,uid)
@@ -1810,6 +1817,7 @@ class LdapManager:
 		mod_list.append(mod)
 		path="cn="+group_cn+",ou=Managed,ou=Groups,"+self.llxvar("LDAP_BASE_DN")
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
@@ -1827,6 +1835,7 @@ class LdapManager:
 		mod_list.append(mod)
 		path="cn="+group_cn+",ou=System,ou=Groups,"+self.llxvar("LDAP_BASE_DN")
 		try:
+			mod_list=self.core.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
 		except Exception as e:
 			self.log("del_user_from_generic_group",e,uid + " " + group_cn)
@@ -2011,6 +2020,7 @@ class LdapManager:
 				mod=( ldap.MOD_REPLACE, "x-lliurex-freeze", "True" )
 				mod_list.append(mod)
 				try:
+					mod_list=self.core.str_to_bytes(mod_list)
 					self.ldap.modify_s(path,mod_list)
 					frozen_users[uid]=True
 				except Exception as e:
@@ -2033,6 +2043,7 @@ class LdapManager:
 					mod_list=[]
 					mod=(ldap.MOD_REPLACE,'x-lliurex-freeze',"False")
 					mod_list.append(mod)
+					mod_list=self.core.str_to_bytes(mod_list)
 					self.ldap.modify_s(path,mod_list)
 					unfrozen_users[uid]=True
 				except Exception as exc:
@@ -2056,6 +2067,7 @@ class LdapManager:
 				mod_list=[]
 				mod=(ldap.MOD_REPLACE,'x-lliurex-freeze',"True")
 				mod_list.append(mod)
+				mod_list=self.core.str_to_bytes(mod_list)
 				self.ldap.modify_s(path,mod_list)
 				frozen_groups[cn]=True
 			except Exception as e:
@@ -2077,6 +2089,7 @@ class LdapManager:
 				mod_list=[]
 				mod=(ldap.MOD_REPLACE,'x-lliurex-freeze',"False")
 				mod_list.append(mod)
+				mod_list=self.core.str_to_bytes(mod_list)
 				self.ldap.modify_s(path,mod_list)
 				unfrozen_groups[cn]=True
 			except Exception as e:
@@ -2156,7 +2169,7 @@ if __name__=="__main__":
 	
 	
 	
-	ldapman=LdapManager(getLliurexVariables())
+	ldapman=LdapManager([])
 	
 	#ldapman.get_samba_id2()
 	

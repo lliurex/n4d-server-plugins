@@ -21,12 +21,7 @@ class PasswordManager:
 		
 		if not os.path.exists("/lib/systemd/system/net-server\\x2dsync.mount"):
 			
-			if os.path.exists("/net/server-sync/var/lib/n4d/n4d.sqlite"):
-				ret=self.sqlite_to_json(True)
-				if ret:
-					os.remove("/net/server-sync/var/lib/n4d/n4d.sqlite")
-			else:
-				self.load_password_file()
+			self.load_password_file()
 			
 	#def init
 
@@ -110,7 +105,7 @@ class PasswordManager:
 		
 		if set_perms:
 			prevmask=os.umask(0)
-			os.chmod(f,0640)
+			os.chmod(f,0o640)
 			os.umask(prevmask)
 		
 	#def write_file

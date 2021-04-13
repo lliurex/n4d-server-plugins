@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+import n4d.server.core
+
 class IptablesManager:
 	
 	def __init__(self):
@@ -10,6 +12,8 @@ class IptablesManager:
 		self.iptables_tc_skel="iptables -%s OUTPUT -o %s -m owner --uid-owner %s -m comment --comment N4D_IPTABLES_TC -j DROP"
 		self.iptables_fc_skel="iptables -%s FORWARD -s %s  -p tcp ! -d 10.0.0.0/8 -m comment --comment N4D_IPTABLES_FC -j DROP"
 		self.blocked_list={}
+		
+		self.core=n4d.server.core.Core.get_core()
 		
 	#def init
 	
@@ -21,7 +25,12 @@ class IptablesManager:
 			#thin
 			if user not in self.blocked_list:
 			
-				eth=objects["VariablesManager"].get_variable("EXTERNAL_INTERFACE")
+				#eth=objects["VariablesManager"].get_variable("EXTERNAL_INTERFACE")
+				ret=self.get_variable("EXTERNAL_INTERFACE")
+				if ret["status"]!=0:
+					return 1
+				eth=ret["return"]
+				
 				#testing
 				'''
 				import xmlrpclib as x
@@ -54,7 +63,10 @@ class IptablesManager:
 			#thin
 			if user in self.blocked_list:
 			
-				eth=objects["VariablesManager"].get_variable("EXTERNAL_INTERFACE")
+				ret=self.get_variable("EXTERNAL_INTERFACE")
+				if ret["status"]!=0:
+					return 1
+				eth=ret["return"]
 	
 				#testing
 				'''
@@ -100,7 +112,7 @@ class IptablesManager:
 		
 		self.blocked_list={}
 		
-		output=str(subprocess.Popen(["iptables -L | grep N4D"],stdout=subprocess.PIPE,shell=True).communicate()[0])
+		output=subprocess.Popen(["iptables -L | grep N4D"],stdout=subprocess.PIPE,shell=True).communicate()[0].decode("utf-8")
 		for line in output.split("\n"):
 			if len(line)>1:
 				line=line.split(" ")

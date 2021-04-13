@@ -50,7 +50,7 @@ class NetFilesManager:
 			usergid = int(grp.getgrnam("nogroup").gr_gid) 
 			#fix umask for fix correct permission
 			prevmask = os.umask(0)
-			os.mkdir(nethome,02770)
+			os.mkdir(nethome,0o2770)
 			#shutils.copytree("/etc/skel/UserFiles",nethome,symlinks=True)
 			#p1=subprocess.Popen(["rsync","-rltgD","/etc/skel-net/",pipes.quote(nethome)])
 			command='rsync -rltgD /etc/skel-net/ "%s"'%nethome
@@ -68,16 +68,16 @@ class NetFilesManager:
 				for directori in directories:
 					auxpath = os.path.join(base ,directori)
 					os.lchown(auxpath,userid,usergid)
-					os.chmod(auxpath,02770)
+					os.chmod(auxpath,0o2770)
 			
 				for auxfile in files:
 					auxpath = os.path.join(base,auxfile)
 					os.chown(auxpath,userid,usergid)
-					os.chmod(auxpath,0660)	
+					os.chmod(auxpath,0o660)	
 			# for 
 
 			# restore old umask
-			os.chmod(nethome,02770)
+			os.chmod(nethome,0o2770)
 			os.umask(prevmask)
 			for acl in self.home_acls:
 				#command='setfacl %s "%s"'%(acl%str(userid),pipes.quote(nethome))
@@ -134,7 +134,7 @@ class NetFilesManager:
 		if not os.path.exists(self.groups_path):
 				
 				try:
-					os.mkdir(self.groups_path,0775)
+					os.mkdir(self.groups_path,0o775)
 				except Exception as e:
 					print(e)
 					return -1
@@ -152,14 +152,14 @@ class NetFilesManager:
 		if not os.path.exists(self.groups_path+group_name):
 			
 			try:
-				os.mkdir(self.groups_path+group_name,0750)
+				os.mkdir(self.groups_path+group_name,0o750)
 			except Exception as e:
 				print(e)
 				os.umask(prevmask)
 				return -2
 
 		else:
-			os.chmod(self.groups_path+group_name,0750)
+			os.chmod(self.groups_path+group_name,0o750)
 
 		try:
 

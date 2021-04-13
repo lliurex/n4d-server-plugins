@@ -205,7 +205,7 @@ class Golem:
 		
 		dic={}
 		p = subprocess.Popen(["groups",uid],stdout = subprocess.PIPE,stderr = subprocess.PIPE)
-		output = p.communicate()[0]
+		output = p.communicate()[0].decode("utf-8")
 		output=output.replace("\n","")
 		
 		dic["groups"]=output
@@ -252,7 +252,7 @@ class Golem:
 		uid,password=user_info
 		dic={}
 		p = subprocess.Popen(["groups",uid],stdout = subprocess.PIPE,stderr = subprocess.PIPE)
-		output = p.communicate()[0]
+		output = p.communicate()[0].decode("utf-8")
 		output=output.replace("\n","")
 		
 		dic["groups"]=output
@@ -803,7 +803,7 @@ class Golem:
 					return "false:xml_encrypted"
 				elif passwd!="" and not is_xml:
 					p=subprocess.Popen(["openssl","enc","-des","-d","-k",passwd,"-in",server_path,"-out",server_path+".xml"],stderr=subprocess.PIPE)
-					output=p.communicate()[1]
+					output=p.communicate()[1].decode("utf-8")
 					if output!=None:
 						if "bad decrypt" in output:
 							return "false:xml_bad_password"

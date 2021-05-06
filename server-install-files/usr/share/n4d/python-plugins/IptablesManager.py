@@ -17,6 +17,7 @@ class IptablesManager:
 		
 	#def init
 	
+	
 	def block(self,user,ip):
 		
 		self.get_iptables_list()
@@ -26,19 +27,10 @@ class IptablesManager:
 			if user not in self.blocked_list:
 			
 				#eth=objects["VariablesManager"].get_variable("EXTERNAL_INTERFACE")
-				ret=self.get_variable("EXTERNAL_INTERFACE")
+				ret=self.core.get_variable("EXTERNAL_INTERFACE")
 				if ret["status"]!=0:
 					return 1
 				eth=ret["return"]
-				
-				#testing
-				'''
-				import xmlrpclib as x
-				c=x.ServerProxy("https://localhost:9779")
-				eth=c.get_variable("","VariablesManager","EXTERNAL_INTERFACE")
-				'''
-				# 
-				
 				cmd=self.iptables_tc_skel%("I",eth,user)
 				os.system(cmd)
 			
@@ -63,19 +55,10 @@ class IptablesManager:
 			#thin
 			if user in self.blocked_list:
 			
-				ret=self.get_variable("EXTERNAL_INTERFACE")
+				ret=self.core.get_variable("EXTERNAL_INTERFACE")
 				if ret["status"]!=0:
 					return 1
 				eth=ret["return"]
-	
-				#testing
-				'''
-				import xmlrpclib as x
-				c=x.ServerProxy("https://localhost:9779")
-				eth=c.get_variable("","VariablesManager","EXTERNAL_INTERFACE")
-				'''
-				# 
-				
 				cmd=self.iptables_tc_skel%("D",eth,user)
 				os.system(cmd)
 				

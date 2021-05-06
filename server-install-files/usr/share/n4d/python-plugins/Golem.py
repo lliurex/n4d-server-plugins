@@ -11,15 +11,23 @@ import pyinotify
 import time
 import shutil
 
+import n4d.server.core
+import n4d.responses
+
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
 
 class Golem:
 
 
-	PLUGIN_PATH="/usr/share/n4d/python-plugins/"
+	SUPPORT_PATH="/usr/share/n4d/python-plugins/support/"
 	LDAP_LOG="/var/lib/ldap/"
 	
+	def __init__(self):
+		
+		self.core=n4d.server.core.Core.get_core()
+		
+	#def init
 	
 	def startup(self,options):
 		
@@ -27,17 +35,17 @@ class Golem:
 		try:
 			self.mime=magic.open(magic.MAGIC_MIME)
 			self.mime.load()
-			self.obj=imp.load_source("LdapManager",Golem.PLUGIN_PATH + "LdapManager.py")
-			obj3=imp.load_source("NetFilesManager",Golem.PLUGIN_PATH + "NetFilesManager.py")
-			obj4=imp.load_source("PasswordManager",Golem.PLUGIN_PATH + "PasswordManager.py")
-			obj5=imp.load_source("GesItaManager",Golem.PLUGIN_PATH + "GesItaManager.py")
-			obj6=imp.load_source("FileOperations",Golem.PLUGIN_PATH + "FileOperations.py")
-			obj7=imp.load_source("PeterPan",Golem.PLUGIN_PATH + "PeterPan.py")
-			self.ldap=self.obj.LdapManager(llxvars)
-			self.netfiles=obj3.NetFilesManager(llxvars)
+			self.obj=imp.load_source("LdapManager",Golem.SUPPORT_PATH + "LdapManager.py")
+			obj3=imp.load_source("NetFilesManager",Golem.SUPPORT_PATH + "NetFilesManager.py")
+			obj4=imp.load_source("PasswordManager",Golem.SUPPORT_PATH + "PasswordManager.py")
+			obj5=imp.load_source("GesItaManager",Golem.SUPPORT_PATH + "GesItaManager.py")
+			#obj6=imp.load_source("FileOperations",Golem.SUPPORT_PATH + "FileOperations.py")
+			obj7=imp.load_source("PeterPan",Golem.SUPPORT_PATH + "PeterPan.py")
+			self.ldap=self.obj.LdapManager()
+			self.netfiles=obj3.NetFilesManager()
 			self.pw=obj4.PasswordManager()
-			self.itaca=obj5.GesItaManager(llxvars,self,'llxgesc.xml')
-			self.file_operations=obj6.FileOperations()
+			self.itaca=obj5.GesItaManager()
+			#self.file_operations=obj6.FileOperations()
 			self.peter_pan=obj7.PeterPan()
 			self.try_count=0
 			self.sharefunctions = {}
@@ -58,6 +66,13 @@ class Golem:
 		
 	#def __init__
 	
+
+	def llxvars(self,var_name):
+		
+		return self.core.get_variable(var_name)["return"]
+		
+	#def llxvars
+
 
 	def start_inotify(self):
 
@@ -122,12 +137,15 @@ class Golem:
 	def add_user(self,plantille,properties,generic_mode=False):
 		
 		generated_user=None
+		'''
 		properties["uid"]=properties["uid"].encode("utf8")
 		properties["cn"]=properties["cn"].encode("utf8")
 		properties["sn"]=properties["sn"].encode("utf8")
-		
-		if properties.has_key("userPassword"):
+		'''
+		'''
+		if "userPassword" in properties:
 			properties["userPassword"]=properties["userPassword"].encode("utf8")
+		'''
 		
 		if type(generic_mode)==type(True) and generic_mode:
 			generated_user=self.ldap.add_user(generic_mode,plantille,properties)
@@ -142,9 +160,10 @@ class Golem:
 			properties["group_type"]=plantille
 			self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem','add_user',properties)
 			self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','add_user',[properties])
-			return "true: " + generated_user["uid"]
+			ret="true: " + generated_user["uid"]
+			return n4d.responses.build_successful_call_response(ret)
 		else:
-			return generated_user
+			return n4d.responses.build_successful_call_response(generated_user)
 		
 	#def add_user
 	
@@ -210,9 +229,9 @@ class Golem:
 		
 		dic["groups"]=output
 		
-		students="ou=Students,ou=People," + llxvars("LDAP_BASE_DN")
-		teachers="ou=Teachers,ou=People," + llxvars("LDAP_BASE_DN")
-		admins="ou=Admins,ou=People," + llxvars("LDAP_BASE_DN")
+		students="ou=Students,ou=People," + self.llxvars("LDAP_BASE_DN")
+		teachers="ou=Teachers,ou=People," + self.llxvars("LDAP_BASE_DN")
+		admins="ou=Admins,ou=People," + self.llxvars("LDAP_BASE_DN")
 		
 		group_type="None"
 		
@@ -233,14 +252,19 @@ class Golem:
 			group_type="admin"
 			#return "true " + group_type
 
+		'''
 		if "NTicketsManager" in objects:
 			if objects["NTicketsManager"].validate_user(uid,password):
 				return "true " + group_type
-			
-		if validate_user(uid,password)[0]:
-			return "true "+ group_type
+		'''
+		
+		if self.core.validate_user(uid,password)["status"]==0:
+			old_ret="true "+ group_type
 		else:
-			return "false"
+			old_ret="false"
+			
+			
+		return n4d.responses.build_successful_call_response(old_ret)
 
 		
 	#def login
@@ -257,10 +281,10 @@ class Golem:
 		
 		dic["groups"]=output
 		
-		students="ou=Students,ou=People," + llxvars("LDAP_BASE_DN")
-		teachers="ou=Teachers,ou=People," + llxvars("LDAP_BASE_DN")
-		admin="ou=Admins,ou=People," + llxvars("LDAP_BASE_DN")
-		others="ou=Other,ou=People," + llxvars("LDAP_BASE_DN")
+		students="ou=Students,ou=People," + self.llxvars("LDAP_BASE_DN")
+		teachers="ou=Teachers,ou=People," + self.llxvars("LDAP_BASE_DN")
+		admin="ou=Admins,ou=People," + self.llxvars("LDAP_BASE_DN")
+		others="ou=Other,ou=People," + self.llxvars("LDAP_BASE_DN")
 		
 		if output.find("students")!=-1:
 			path="uid=" + uid + "," + students
@@ -271,15 +295,14 @@ class Golem:
 		elif output.find("admin")!=-1:
 			path="uid=" + uid + "," + admin
 		else:
-			return "false"
+			return n4d.responses.build_failed_call_response("false")
 		
 		dic["path"]=path
 		
 		#dic["llxvars"]=llxvars
 		
 		try:
-			
-			tmp_ldap=ldap.initialize(llxvars("CLIENT_LDAP_URI"))
+			tmp_ldap=ldap.initialize(self.llxvars("CLIENT_LDAP_URI"))
 			dic["a"]="initialize"
 			tmp_ldap.set_option(ldap.VERSION,ldap.VERSION3)
 			dic["b"]="set_option"
@@ -291,13 +314,14 @@ class Golem:
 			if "Teachers" in path:
 				self.pw.set_externally_modified(uid)
 			
-			return "true"
+			return n4d.responses.build_successful_call_response("true")
 			
 		except Exception as inst:
 
 			dic["exception"]=inst
+			print(inst)
 		
-			return "false"
+			return n4d.responses.build_failed_call_response("false")
 		
 	#def change_own_password
 	
@@ -458,7 +482,7 @@ class Golem:
 		return teachers_func_list
 		
 	def get_admin_function_list(self):
-		return admin_func_list
+		return n4d.responses.build_successful_call_response(["a","b"])
 		
 	def get_others_function_list(self):
 		return others_func_list
@@ -496,7 +520,7 @@ class Golem:
 		for item in list:
 			return_list.append(item.properties)
 			
-		return return_list
+		return n4d.responses.build_successful_call_response(return_list)
 		
 
 	#def get_user_list
@@ -512,7 +536,7 @@ class Golem:
 	
 	def get_available_groups(self):
 		
-		return self.ldap.get_available_groups()
+		return n4d.responses.build_successful_call_response(self.ldap.get_available_groups())
 		
 	#def get_available_groups
 	
@@ -1000,7 +1024,7 @@ class Golem:
 			for item in groups:
 				
 				exported_groups[item["cn"][0]]={}
-				if item.has_key("memberUid"):
+				if "memberUid" in item:
 					exported_groups[item["cn"][0]]["members"]=item["memberUid"]
 				else:
 					exported_groups[item["cn"][0]]["members"]=[]
@@ -1323,7 +1347,7 @@ class Golem:
 	def is_roadmin_available(self):
 		
 		try:
-			return self.ldap.custom_search("cn=roadmin,"+llxvars("LDAP_BASE_DN"))["status"]
+			return self.ldap.custom_search("cn=roadmin,"+self.llxvars("LDAP_BASE_DN"))["status"]
 		except:
 			return False
 	

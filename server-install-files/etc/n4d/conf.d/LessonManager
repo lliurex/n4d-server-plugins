@@ -1,6 +1,0 @@
-[SETUP]
-type=python
-path=LessonManager.py
-class=LessonManager
-[METHODS]
-get_lesson=anonymous

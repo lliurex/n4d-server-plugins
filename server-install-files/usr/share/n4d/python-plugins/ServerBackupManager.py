@@ -4,7 +4,10 @@ import os
 import tarfile
 import tempfile
 import time
-import ConfigParser
+import configparser as ConfigParser
+
+import n4d.server.core
+import n4d.responses
 
 class ServerBackupManager:
 
@@ -12,6 +15,7 @@ class ServerBackupManager:
 		
 		self.backup_list=["VariablesManager","Hostname","NetworkManager","Dnsmasq","N4dProxy","SlapdManager","PamnssPlugin","SambaManager"]
 		#self.backup_list=["VariablesManager","Hostname","NetworkManager","Dnsmasq","N4dProxy","SlapdManager","PamnssPlugin","SambaManager","NetFoldersManager","MysqlManager","CupsManager","ApacheManager"]
+		self.core=n4d.server.core.Core.get_core()
 		
 	#def init
 
@@ -53,9 +57,20 @@ class ServerBackupManager:
 				try:
 
 					if service=="NetFoldersManager":
-						ret[service]=objects[service].backup(netfolders_list,path)
+						#ret[service]=objects[service].backup(netfolders_list,path)
+						tmp=self.core.get_plugin(service).backup(netfolders_list,path)["return"]
+						if tmp["status"]==0:
+							ret[service]=tmp["return"]
+						else:
+							Exception e(tmp["msg"])
+							raise e
 					else:
-						ret[service]=objects[service].backup(path)
+						tmp=self.core.get_plugin[service].backup(path)
+						if tmp["status"]==0:
+							ret[service]=tmp["return"]
+						else:
+							Exception e(tmp["msg"])
+							raise e
 						
 					if ret[service][0]:
 						fname=ret[service][1].split("/")[-1]
@@ -80,11 +95,12 @@ class ServerBackupManager:
 			os.system("chmod 660 %s"%file_name)
 			os.system("chown root:admins %s"%file_name)
 			
-			return [True,ret,file_name]
+			ret=[True,ret,file_name]
+			return n4d.responses.build_successful_call_response(ret)
 			
 		else:
-			
-			return [False,ret,"Backup file not found"]
+			ret=[False,ret,"Backup file not found"]
+			return n4d.responses.build_failed_call_response(ret)
 		
 	#def backup
 	
@@ -122,7 +138,7 @@ class ServerBackupManager:
 							else:
 								ret[key]=[False,"Plugin not found"]
 						except Exception as e:
-							print e
+							print(e)
 							ret[key]=str(e)
 							
 					#Fix ipxeboot symlink restore
@@ -130,11 +146,11 @@ class ServerBackupManager:
 					ipxeRealPath=os.path.realpath(ipxeLinkPath)
 					try:
 						if not(os.path.exists(ipxeRealPath)):
-							print ("Fixing ipxeboot symlink...")
+							print("Fixing ipxeboot symlink...")
 							os.remove(ipxeLinkPath)
 							os.symlink("/usr/share/llxbootmanager/www-boot",ipxeLinkPath)
 					except Exception as e:
-						print e
+						print(e)
 						ret[key]=str(e)
 					
 					self.final_operations()

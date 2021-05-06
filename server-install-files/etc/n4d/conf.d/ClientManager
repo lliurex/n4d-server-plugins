@@ -1,7 +1,0 @@
-[SETUP]
-type=python
-path=ClientManager.py
-class=ClientManager
-[METHODS]
-register_client=anonymous
-get_client_list=anonymous

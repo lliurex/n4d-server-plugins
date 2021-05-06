@@ -62,14 +62,14 @@ class ServerBackupManager:
 						if tmp["status"]==0:
 							ret[service]=tmp["return"]
 						else:
-							Exception e(tmp["msg"])
+							e=Exception(tmp["msg"])
 							raise e
 					else:
 						tmp=self.core.get_plugin[service].backup(path)
 						if tmp["status"]==0:
 							ret[service]=tmp["return"]
 						else:
-							Exception e(tmp["msg"])
+							e=Exception(tmp["msg"])
 							raise e
 						
 					if ret[service][0]:

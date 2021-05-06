@@ -1,0 +1,2 @@
+server-install-files/*	/
+debian/lintian/overrides/n4d-server-plugins  usr/share/lintian/overrides

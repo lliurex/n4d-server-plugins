@@ -1,0 +1,15 @@
+Source: n4d-server-plugins
+Section: misc
+Priority: standard
+Maintainer: LliureX Team <lliurex@gva.es>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 4.1.2
+Homepage: http://lliurex.net
+Vcs-Git: https://github.com/lliurex/n4d-server-plugins.git
+
+Package: n4d-server-plugins
+Architecture: all
+Pre-Depends: n4d (>0.900)
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3, python3-ldap
+Description: n4d server plugins
+ This package contains n4d plugins for lliurex servers 

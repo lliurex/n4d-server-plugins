@@ -1,3 +1,11 @@
+n4d-server-plugins (0.200) focal; urgency=medium
+
+  * First focal release. 
+  * python3 and n4d > 0.900 migration. Some functions will not work. Adding
+    users should be safe.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 06 May 2021 09:53:51 +0200
+
 n4d-server-plugins (0.139.1) bionic; urgency=medium
 
   * Dummy upgrade

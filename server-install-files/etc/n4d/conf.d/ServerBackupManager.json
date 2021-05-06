@@ -1,0 +1,44 @@
+{
+    "SETUP": {
+        "type": "python",
+        "path": "ServerBackupManager.py",
+        "class": "ServerBackupManager"
+    },
+    "METHODS": {
+        "backup": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "get_basic_services_list": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        },
+        "server_basics_backup": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "restore": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "server_basics_restore": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "final_operations": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        }
+    }
+}

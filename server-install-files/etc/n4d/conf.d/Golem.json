@@ -1,0 +1,369 @@
+{
+    "SETUP": {
+        "type": "python",
+        "path": "Golem.py",
+        "class": "Golem"
+    },
+    "METHODS": {
+        "_restore_groups_folders": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "add_user": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "add_generic_users": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "login": {
+            "allowed_groups": [
+                "*"
+            ]
+        },
+        "change_own_password": {
+            "allowed_groups": [
+                "*"
+            ]
+        },
+        "delete_student": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "delete_teacher": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "delete_students": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "delete_teachers": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "delete_all": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "get_students_function_list": {
+            "allowed_groups": [
+                "students"
+            ]
+        },
+        "get_teachers_function_list": {
+            "allowed_groups": [
+                "teachers"
+            ]
+        },
+        "get_admin_function_list": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "get_student_list": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        },
+        "get_teacher_list": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        },
+        "get_user_list": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        },
+        "light_get_user_list": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        },
+        "get_available_groups": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "add_to_group": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "remove_from_group": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "change_student_personal_data": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "change_password": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "change_student_password": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "freeze_user": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "freeze_group": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "unfreeze_user": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "unfreeze_group": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "add_teacher_to_admins": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "del_teacher_from_admins": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "change_group_description": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "delete_group": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "add_group": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "get_students_passwords": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "get_teachers_passwords_encrypted": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "get_teachers_passwords": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "get_all_passwords": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "generic_student_to_itaca": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "generic_teacher_to_itaca": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "send_xml_to_server": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "gescen_info": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "gescen_set_path": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "gescen_load": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "gescen_groups": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "gescen_partial": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "gescen_full": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "empty_students": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "empty_teachers": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "empty_all": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "empty_home": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "get_frozen_users": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "get_frozen_groups": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "is_frozen_user": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        },
+        "exist_home_or_create": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "create_group_folder": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "restore_groups_folders": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "full_search": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "export_llum_info": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "import_llum_info": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "is_roadmin_available": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        }
+    }
+}

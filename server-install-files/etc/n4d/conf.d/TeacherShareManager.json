@@ -1,0 +1,41 @@
+{
+    "SETUP": {
+        "type": "python",
+        "path": "TeacherShareManager.py",
+        "class": "TeacherShareManager"
+    },
+    "METHODS": {
+        "remove_path": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "add_path": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "is_configured": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "clear_paths": {
+            "allowed_groups": [
+                "sudo",
+                "admins"
+            ]
+        },
+        "get_paths": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        }
+    }
+}

@@ -98,7 +98,6 @@ class PasswordManager:
 			if type(self.users[user]["sn"])!=str:
 				self.users[user]["sn"]=self.users[user]["sn"].decode("utf-8")
 		
-		print(self.users)
 		data=json.dumps(self.users,indent=4,ensure_ascii=False)
 		output_file=open(f,"w")
 		output_file.write(data)

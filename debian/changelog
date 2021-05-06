@@ -1,3 +1,9 @@
+n4d-server-plugins (0.202) focal; urgency=medium
+
+  * Removed print in passwordmanager
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 06 May 2021 10:27:20 +0200
+
 n4d-server-plugins (0.201) focal; urgency=medium
 
   * Fixed serverbnuckup syntax errors

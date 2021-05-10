@@ -1,3 +1,9 @@
+n4d-server-plugins (0.203) focal; urgency=medium
+
+  * Fixed get_backup_name in BackupManager
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 10 May 2021 11:14:51 +0200
+
 n4d-server-plugins (0.202) focal; urgency=medium
 
   * Removed print in passwordmanager

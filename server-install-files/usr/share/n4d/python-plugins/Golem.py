@@ -10,6 +10,7 @@ import magic
 import pyinotify
 import time
 import shutil
+import os
 
 import n4d.server.core
 import n4d.responses
@@ -189,7 +190,8 @@ class Golem:
 			properties['cn'] = item['uid']
 			properties['sn'] = item['uid']
 			self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','add_user',[properties])
-		return generated_list
+		
+		return n4d.responses.build_successful_call_response(generated_list)
 		
 		
 	#def add_generic_users
@@ -349,7 +351,8 @@ class Golem:
 		properties['uid'] = uid
 		properties['group_type'] = 'Students'
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','delete_user',[properties])
-		return ret
+		
+		return n4d.responses.build_successful_call_response(ret)
 		
 	#def delete_student
 
@@ -377,8 +380,8 @@ class Golem:
 		properties['uid'] = uid
 		properties['group_type'] = 'Teachers'
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','delete_user',[properties])
-
-		return ret
+		
+		return n4d.responses.build_successful_call_response(ret)
 		
 	#def delete_teacher
 
@@ -404,7 +407,7 @@ class Golem:
 		properties['group_type'] = 'Others'
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','delete_user',[properties])
 
-		return ret
+		return n4d.responses.build_successful_call_response(ret)
 		
 	#def delete_other
 
@@ -417,14 +420,14 @@ class Golem:
 		
 		for item in list:
 			if item.properties["path"].find("ou=Students")!=-1:
-				ret=self.delete_student(item.properties["uid"],delete_data) 
+				ret=self.delete_student(item.properties["uid"],delete_data)["return"]
 				ret_list.append(item.properties["uid"] +":"+ret)
 		
 		
 		self.ldap.set_xid("Students",20000)
 
-		return ret_list
-				
+		return n4d.responses.build_successful_call_response(ret_list)
+
 	#def delete_students
 
 	
@@ -436,12 +439,12 @@ class Golem:
 		
 		for item in list:
 			if item.properties["path"].find("ou=Teachers")!=-1:
-				ret=self.delete_teacher(item.properties["uid"],delete_data)
+				ret=self.delete_teacher(item.properties["uid"],delete_data)["return"]
 				ret_list.append(item.properties["uid"] +":"+ret)
 
 		self.ldap.set_xid("Teachers",5000)
 
-		return ret_list
+		return n4d.responses.build_successful_call_response(ret_list)
 			
 		
 	#def delete_students
@@ -457,35 +460,24 @@ class Golem:
 		
 		for item in list:
 			if item.properties["path"].find("ou=Teachers")!=-1:
-				ret=self.delete_teacher(item.properties["uid"],delete_data)
+				ret=self.delete_teacher(item.properties["uid"],delete_data)["return"]
 				ret_list.append(item.properties["uid"] +":"+ret)
 				
 			if item.properties["path"].find("ou=Students")!=-1:
-				ret=self.delete_student(item.properties["uid"],delete_data)
+				ret=self.delete_student(item.properties["uid"],delete_data)["return"]
 				ret_list.append(item.properties["uid"] +":"+ret)
 				
 			if item.properties["path"].find("ou=Other")!=-1:
-				ret=self.delete_other(item.properties["uid"],delete_data)
+				ret=self.delete_other(item.properties["uid"],delete_data)["return"]
 				ret_list.append(item.properties["uid"] +":"+ret)
 				
 		self.ldap.set_xid("Students",20000)
 		self.ldap.set_xid("Teachers",5000)
 				
-		return ret_list
+		return n4d.responses.build_successful_call_response(ret_list)
 		
 	#def delete_students
 
-	def get_students_function_list(self):
-		return students_func_list
-
-	def get_teachers_function_list(self):
-		return teachers_func_list
-		
-	def get_admin_function_list(self):
-		return n4d.responses.build_successful_call_response(["a","b"])
-		
-	def get_others_function_list(self):
-		return others_func_list
 
 	def get_student_list(self):
 		
@@ -496,7 +488,7 @@ class Golem:
 		for item in list:
 			return_list.append(item.properties)
 							
-		return return_list
+		return n4d.responses.build_successful_call_response(return_list)
 		
 	def get_teacher_list(self):
 		
@@ -507,13 +499,11 @@ class Golem:
 		for item in list:
 			return_list.append(item.properties)
 							
-		return return_list
+		return n4d.responses.build_successful_call_response(return_list)
 			
 	def get_user_list(self,filter):
 
 		list=self.ldap.search_user(filter)
-
-		
 		#return self.ldap.light_search(filter)
 		
 		return_list=[]
@@ -528,9 +518,7 @@ class Golem:
 	def light_get_user_list(self):
 		
 		list=self.ldap.light_search()
-
-			
-		return list
+		return n4d.responses.build_successful_call_response(list)
 		
 	#def light_get_user_list
 	
@@ -563,7 +551,7 @@ class Golem:
 		except:
 			pass
 			
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def add_to_group
 	
@@ -578,14 +566,14 @@ class Golem:
 		#return must be "true" (string)
 
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('remove_from_group'),{'group':{'cn':group},'user':user_info})
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def remove_from_group
 
 
 	def change_student_personal_data(self,uid,name,surname):
-		name=unicode(name).encode("utf8")
-		surname=unicode(surname).encode("utf8")
+		#name=unicode(name).encode("utf8")
+		#surname=unicode(surname).encode("utf8")
 		result=self.ldap.change_student_name(uid,name)
 		result2=self.ldap.change_student_surname(uid,surname)
 		if result==result2 and result=="true":
@@ -601,15 +589,15 @@ class Golem:
 			properties['sn'] = surname
 			self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','update_user',[properties])
 
-			return result
+			return n4d.responses.build_successful_call_response(result)
 		else:
-			return result + "," + result2
+			return n4d.responses.build_successful_call_response(result + "," + result2)
 		
 	#def change_personal_data
 	
 	def change_password(self,path,password,uid="",cn="",sn="",auto=False):
 		
-		password=unicode(password).encode("utf8")
+		#password=unicode(password).encode("utf8")
 		result=self.ldap.change_password(path,password)
 		
 		#trying to obtain user uid
@@ -626,7 +614,7 @@ class Golem:
 			if "Teachers" in path:
 				self.pw.set_externally_modified(uid)
 		
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def change_student_password
 
@@ -637,51 +625,51 @@ class Golem:
 		#return=="true"
 		
 		
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def change_student_password
 	def freeze_user(self,uid_list):
 		self.ldap.freeze_user(uid_list)
-		return 0
+		return n4d.responses.build_successful_call_response(0)
 	#def freeze_user
 
 	def freeze_group(self,cn):
 		self.ldap.freeze_group(cn)
-		return 0
+		return n4d.responses.build_successful_call_response(0)
 	#def freeze_group
 
 	def unfreeze_user(self,uid_list):
 		self.ldap.unfreeze_user(uid_list)
-		return 0
+		return n4d.responses.build_successful_call_response(0)
 	#def unfreeze_user
 
 	def unfreeze_group(self,cn):
 		self.ldap.unfreeze_group(cn)
-		return 0
+		return n4d.responses.build_successful_call_response(0)
 	#def unfreeze_group
 	
 	def add_teacher_to_admins(self,uid):
 		
 		result=self.ldap.add_teacher_to_admins(uid)
 		
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def add_teacher_to_admins
 	
 	def del_teacher_from_admins(self,uid):
 		
 		result=self.ldap.del_teacher_from_admins(uid)
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def de_teacher_from_admins
 	
 	
 	def change_group_description(self,gid,description):
 		
-		description=unicode(description).encode("utf8")
+		#description=unicode(description).encode("utf8")
 		result=self.ldap.change_group_description(gid,description)
 		
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def change_group_description
 	
@@ -695,34 +683,34 @@ class Golem:
 			print(e)
 		
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('delete_group'),{'group':{'cn':group_name}})
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def delete_group
 	
 	
 	def add_group(self,properties):
 		
-		properties["description"]=unicode(properties["description"]).encode("utf8")
+		#properties["description"]=unicode(properties["description"]).encode("utf8")
 		result=self.ldap.add_group(properties)
 		
 		try:
 			self.create_group_folder(properties["cn"])
 		except Exception as e:
-			return result
+			return n4d.responses.build_successful_call_response(result)
 		
 		try:
 			self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('add_group'),{'group':properties})
 		except Exception as e:
 			print(e)
-		return result
+		return n4d.responses.build_successful_call_response(result)
 		
 	#def add_group
 	
 	def get_students_passwords(self):
 		
 		slist = self.ldap.get_students_passwords()
-
-		return self.quicksort(slist)
+		slist=self.quicksort(slist)
+		return n4d.responses.build_successful_call_response(slist)
 		
 	#def get_students_passwords
 
@@ -730,7 +718,7 @@ class Golem:
 
 		tlist= self.ldap.get_teachers_passwords()
 
-		return self.quicksort(tlist)
+		return n4d.responses.build_successful_call_response(self.quicksort(tlist))
 
 	#def get_teachers_passwords_encrypted
 	
@@ -754,7 +742,7 @@ class Golem:
 		for item in tmp_teachers:
 			final_ret.append(tmp_teachers[item])
 			
-		return self.quicksort(final_ret)
+		return n4d.responses.build_successful_call_response(self.quicksort(final_ret))
 		
 	#def get_teachers_passwords
 	
@@ -762,12 +750,12 @@ class Golem:
 	def get_all_passwords(self,force_teachers=False):
 		
 		slist=self.ldap.get_students_passwords()
-		list2=self.get_teachers_passwords()
+		list2=self.get_teachers_passwords()["return"]
 
 		for item in list2:
 			slist.append(item)
 
-		return self.quicksort(slist)
+		return n4d.responses.build_successful_call_response(self.quicksort(slist))
 		
 	#def get_all_passwords
 	
@@ -779,7 +767,7 @@ class Golem:
 	
 	def sort_quicksort (self,lista,izdo,dcho) : 
 		if izdo<dcho : 
-			pivote=lista[(izdo+dcho)/2] 
+			pivote=lista[int((izdo+dcho)/2)] 
 			i,d=izdo,dcho 
 			while i<=d : 
 				while lista[i]['sn'].lower()<pivote['sn'].lower() : i+=1 
@@ -796,13 +784,13 @@ class Golem:
 	
 	def generic_student_to_itaca(self,uid,nia):
 		
-		return self.ldap.generic_student_to_itaca(uid,nia)
+		return n4d.responses.build_successful_call_response(self.ldap.generic_student_to_itaca(uid,nia))
 		
 	#def generic_student_to_itaca
 	
 	def generic_teacher_to_itaca(self,uid,nif):
 		
-		return self.ldap.generic_teacher_to_itaca(uid,nif)
+		return n4d.responses.build_successful_call_response(self.ldap.generic_teacher_to_itaca(uid,nif))
 		
 	#def generic_teachers_to_itaca
 	
@@ -824,58 +812,61 @@ class Golem:
 					is_xml=True
 
 				if passwd=="" and not is_xml:
-					return "false:xml_encrypted"
+					return n4d.responses.build_successful_call_response("false:xml_encrypted")
 				elif passwd!="" and not is_xml:
 					p=subprocess.Popen(["openssl","enc","-des","-d","-k",passwd,"-in",server_path,"-out",server_path+".xml"],stderr=subprocess.PIPE)
 					output=p.communicate()[1].decode("utf-8")
 					if output!=None:
 						if "bad decrypt" in output:
-							return "false:xml_bad_password"
+							return n4d.responses.build_successful_call_response("false:xml_bad_password")
 
 					server_path=server_path+".xml"
 					if self.mime.file(server_path).split(";")[0]=="application/xml":
 						pass
 					else:
-						return "false:invalid_xml"
+						return n4d.responses.build_successful_call_response("false:invalid_xml")
 						
 			
 		except Exception as e:
 			print(e)
-			return "false:send_error"
+			return n4d.responses.build_successful_call_response("false:send_error")
 		if ret==1:
 			try:
 				ret=self.gescen_set_path(server_path)
 				if ret==True:
-					return "true"
+					return n4d.responses.build_successful_call_response("true")
 				elif ret==False:
-					return "false:xml_error"
+					return n4d.responses.build_successful_call_response("false:xml_error")
 				elif ret=="false:xml_encrypted":
-					return ret
+					return n4d.responses.build_successful_call_response(ret)
 				else:
-					return "false:unknown_error"
+					return n4d.responses.build_successful_call_response("false:unknown_error")
 			except:
-				return "false:xml_error"
+				return n4d.responses.build_successful_call_response("false:xml_error")
 		else:
-			return "false:send_error"
+			return n4d.responses.build_successful_call_response("false:send_error")
 		
 		
 	#def send_xml_to_server
 	
 	
 	def gescen_info(self):
+		#as is
 		return self.itaca.get_info()
 	#def gescen_info
 	
 	def gescen_set_path(self,path):
+		#as is
 		return self.itaca.set_path(path)
 	#def gescen_info
 	
 	def gescen_load(self):
+		#as is
 		return self.itaca.load_file()
 	#def gescen_info
 
 	def gescen_groups(self):
-		return self.itaca.get_groups()
+		return n4d.responses.build_successful_call_response(self.itaca.get_groups())
 	#def gescen_group
 
 	def gescen_partial(self,group_list):
@@ -885,7 +876,7 @@ class Golem:
 		users_added = self.itaca.partial_import(group_list)
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('gescen_partial'),{})
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','add_user',users_added)
-		return 'true'
+		return n4d.responses.build_successful_call_response('true')
 
 	#def gescen_partial
 
@@ -895,12 +886,12 @@ class Golem:
 			self.sharefunctions['generate_uid'] = generate_uid
 		except Exception as e:
 			print(e)
-			raise e
+			n4d.responses.build_failed_call_response()
 
 		ret,users_added=self.itaca.full_import()
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('gescen_full'),{})
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','add_user',users_added)
-		return ret
+		return n4d.responses.build_successful_call_response(ret)
 	#def gescen_full
 	
 	def empty_students(self,generic=None):
@@ -910,9 +901,9 @@ class Golem:
 		
 		for item in list:
 			if item.properties["path"].find("ou=Students")!=-1:
-				ret=self.empty_home(item.properties)
+				ret=self.empty_home(item.properties)["return"]
 				ret_list.append(item.properties["uid"] +":"+ret)
-		return ret_list
+		return n4d.responses.build_successful_call_response(ret_list)
 	#def empty_students
 	
 	def empty_teachers(self,generic=None):
@@ -922,9 +913,9 @@ class Golem:
 		
 		for item in list:
 			if item.properties["path"].find("ou=Teachers")!=-1:
-				ret=self.empty_home(item.properties)
+				ret=self.empty_home(item.properties)["return"]
 				ret_list.append(item.properties["uid"] +":"+ret)
-		return ret_list
+		return n4d.responses.build_successful_call_response(ret_list)
 	#def empty_teachers
 	
 	def empty_others(self,generic=None):
@@ -934,18 +925,18 @@ class Golem:
 		
 		for item in list:
 			if item.properties["path"].find("ou=Other")!=-1:
-				ret=self.empty_home(item.properties)
+				ret=self.empty_home(item.properties)["return"]
 				ret_list.append(item.properties["uid"] +":"+ret)
-		return ret_list
+		return n4d.responses.build_successful_call_response(ret_list)
 	#def empty_others
 	
 	def empty_all(self):
 		
 		ret_list=[]
-		ret_list.extend(self.empty_students(True))
-		ret_list.extend(self.empty_teachers(True))
-		ret_list.extend(self.empty_others(True))
-		return ret_list
+		ret_list.extend(self.empty_students(True)["return"])
+		ret_list.extend(self.empty_teachers(True)["return"])
+		ret_list.extend(self.empty_others(True)["return"])
+		return n4d.responses.build_successful_call_response(ret_list)
 		
 	#def empty_all
 		
@@ -955,29 +946,29 @@ class Golem:
 		try:
 			self.netfiles.delete_home(user_info)
 			self.netfiles.create_home(user_info)
-			return "true"
+			return n4d.responses.build_successful_call_response("true")
 		except:
-			return "false"
+			return n4d.responses.build_successful_call_response("false")
 	#def empty_home
 
 	def get_frozen_users(self):
-		return self.ldap.get_frozen_users()
+		return n4d.responses.build_successful_call_response(self.ldap.get_frozen_users())
 	#def get_frozen_users
 
 	def get_frozen_groups(self):
-		return self.ldap.get_frozen_groups()
+		return n4d.responses.build_successful_call_response(self.ldap.get_frozen_groups())
 	#def get_frozen_groups
 	
 	def is_frozen_user(self,user):
-		return self.ldap.is_frozen_user(user)
+		return n4d.responses.build_successful_call_response(self.ldap.is_frozen_user(user))
 		
 	def exist_home_or_create(self,user):
-		return self.netfiles.exist_home_or_create(user)
+		return n4d.responses.build_successful_call_response(self.netfiles.exist_home_or_create(user))
 		
 
 	def create_group_folder(self,group_name):
 		
-		return self.netfiles.create_group_folder(group_name)
+		return n4d.responses.build_successful_call_response(self.netfiles.create_group_folder(group_name))
 		
 		
 	#def create_group_folder
@@ -988,7 +979,7 @@ class Golem:
 			
 			for item in self.get_available_groups():
 				try:
-					id=self.create_group_folder(item["cn"][0])
+					id=self.create_group_folder(item["cn"][0])["return"]
 					ret.append((item["cn"][0],id))
 				except Exception as ex:
 					ret.append((item["cn"][0],str(ex)))
@@ -996,13 +987,13 @@ class Golem:
 		except Exception as e:
 			ret.append(str(e))
 			
-		return ret
+		return n4d.responses.build_successful_call_response(ret)
 		
 	#def restore_group_folders
 	
 	def full_search(self):
 		
-		return self.ldap.full_search("*")
+		return n4d.responses.build_successful_call_response(self.ldap.full_search("*"))
 		
 	#def full_search
 	
@@ -1073,10 +1064,10 @@ class Golem:
 			exported["groups"]=exported_groups
 			exported["users"]=exported_users
 
-			return [True,exported]
+			return n4d.responses.build_successful_call_response([True,exported])
 		
 		except Exception as e:
-			return [False,str(e)]
+			return n4d.responses.build_successful_call_response([False,str(e)])
 		
 						
 		
@@ -1157,7 +1148,7 @@ class Golem:
 				profile=exported_info["users"][uidn]["profile"]
 				
 				if int(uids[profile]) > properties["uidNumber"] :
-					print("Skipping %s ..."%user)
+					#print("Skipping %s ..."%user)
 					skipped.append(user)
 					continue
 				
@@ -1165,7 +1156,7 @@ class Golem:
 				uids[profile]=properties["uidNumber"]
 				self.ldap.xid_counters[profile]=str(uids[profile])
 				
-				print("Adding user %s..."%user)
+				#print("Adding user %s..."%user)
 				ret=self.add_user(profile,properties)
 				
 				if "true" in str(ret):
@@ -1206,7 +1197,7 @@ class Golem:
 				
 				
 				#without uidNumber, add_user should automatically get the next one
-				print("Trying to add skipped.1 user %s..."%user)
+				#print("Trying to add skipped.1 user %s..."%user)
 				ret=self.add_user(profile,properties)
 				
 				if "true" in str(ret):
@@ -1255,7 +1246,7 @@ class Golem:
 				'''
 				
 				#without uidNumber, add_user should automatically get the next one
-				print("Trying to add skipped.2 user %s..."%user)
+				#print("Trying to add skipped.2 user %s..."%user)
 				ret=self.add_user(profile,properties)
 
 				if "true" in str(ret):
@@ -1289,7 +1280,7 @@ class Golem:
 				for i in exported_info["groups"][group]["members"]:
 					try:
 						if i not in skipped:
-							print("Adding user %s to group %s..."%(i,group))
+							#print("Adding user %s to group %s..."%(i,group))
 							self.add_to_group(i,group)
 					except Exception as e:
 						print(e)
@@ -1307,11 +1298,11 @@ class Golem:
 					self.add_teacher_to_admins(user)
 					
 					
-			return[True,]
+			return n4d.responses.build_successful_call_response([True,])
 			
 		except Exception as e:
 			print(e)
-			return [False,str(e)]
+			return n4d.responses.build_successful_call_response([False,str(e)])
 		
 	#def import_llum_info
 	
@@ -1338,18 +1329,20 @@ class Golem:
 				self.restore_groups_folders()
 			except:
 				pass
+				
+			return n4d.responses.build_successful_call_response()
 			
 		except:
-			pass
+			n4d.responses.build_failed_call_response()
 		
 	#def regenerate_net_files
 	
 	def is_roadmin_available(self):
 		
 		try:
-			return self.ldap.custom_search("cn=roadmin,"+self.llxvars("LDAP_BASE_DN"))["status"]
+			return n4d.responses.build_successful_call_response(self.ldap.custom_search("cn=roadmin,"+self.llxvars("LDAP_BASE_DN"))["status"])
 		except:
-			return False
+			return n4d.responses.build_successful_call_response(False)
 	
 	#def is_roadmin_avaiable
 	

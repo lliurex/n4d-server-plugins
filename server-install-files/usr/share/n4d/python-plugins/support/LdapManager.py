@@ -74,6 +74,8 @@ class LdapUser:
 				
 			self.properties["description"]=self.properties["cn"] +  " " + self.properties["sn"]
 		
+		
+		
 		self.properties["objectClass"]=list
 		self.properties["loginShell"]="/bin/bash"
 		self.properties["homeDirectory"]="/home/"+self.uid
@@ -296,8 +298,9 @@ class LdapManager:
 		result=self.ldap.search_s("ou=Managed,ou=Groups,"+self.llxvar("LDAP_BASE_DN"),ldap.SCOPE_SUBTREE)
 		for item in result:
 			path,properties_dic=item
-			if "x-lliurex-ou-properties" in properties_dic["objectClass"] and "x-lliurex-xid-counter" in properties_dic:
+			if b"x-lliurex-ou-properties" in properties_dic["objectClass"] and "x-lliurex-xid-counter" in properties_dic:
 				self.xgid_counter=properties_dic['x-lliurex-xid-counter'][0]
+			
 				
 	#def get_xgid_counter
 	
@@ -359,6 +362,7 @@ class LdapManager:
 			self.xgid_counter=str(value)
 			return [True,str(value)]
 		except Exception as e:
+			print(e)
 			self.log("set_next_xgid",e)
 			return [False,e]
 		
@@ -422,9 +426,12 @@ class LdapManager:
 	
 	def generate_ssha_password(self,password):
 		
-		salt=self.getsalt()
-		ret="{SSHA}" + base64.b64encode(hashlib.sha1(str(password) + salt).digest() + salt)
-		return ret
+		salt=self.getsalt().encode("utf-8")
+			
+		
+		return "{SSHA}" + base64.encodebytes(hashlib.sha1(password + salt).digest() + salt).decode('utf-8')
+		#ret="{SSHA}" + base64.b64encode(hashlib.sha1(password.decode("utf-8") + salt).digest() + salt)
+		#return ret
 		
 	#def generate_ssha_password	
 	
@@ -844,7 +851,7 @@ class LdapManager:
 					
 					#print user.get_modlist()
 					try:
-						self.ldap.add_s(path,user.get_modlist())
+						self.ldap.add_s(path,self.str_to_bytes(user.get_modlist()))
 						group_list=self.add_to_generic_groups(plantille,user)
 						if group_list!=None:
 							user.properties["groups"]=group_list
@@ -1127,6 +1134,8 @@ class LdapManager:
 				if generated_dic!=None:
 					if group_type!=None:
 						self.add_to_group_type(group_type,generated_dic["uid"])
+						if "groups" not in generated_dic:
+							generated_dic["groups"]=[]
 						generated_dic["groups"].append(group_type)
 									
 					generated_users.append(generated_dic)
@@ -1273,9 +1282,10 @@ class LdapManager:
 		#print "*** ADDING " + uid + " to admins"
 		try:
 			mod_list=self.str_to_bytes(mod_list)
-			self.ldap.modify_s(path,mod_list)
+			ret=self.ldap.modify_s(path,mod_list)
 			return "true"
 		except Exception as e:
+			print(e)
 			if type(e)==ldap.TYPE_OR_VALUE_EXISTS:
 				return "true"
 			else:
@@ -1481,28 +1491,27 @@ class LdapManager:
 			if path.find("Admin")!=-1:
 				user.properties["profile"]="admin"
 			
-			user.properties["uidNumber"]=properties_dic["uidNumber"][0]
-			user.properties["gidNumber"]=properties_dic["gidNumber"][0]
+			user.properties["uidNumber"]=properties_dic["uidNumber"][0].decode("utf-8")
+			user.properties["gidNumber"]=properties_dic["gidNumber"][0].decode("utf-8")
 			user.properties["path"]=path
 			user.properties["groups"]=group_list
 			
 			if "x-lliurex-usertype" in properties_dic:
-				user.properties["x-lliurex-usertype"]=properties_dic["x-lliurex-usertype"][0]
+				user.properties["x-lliurex-usertype"]=properties_dic["x-lliurex-usertype"][0].decode("utf-8")
 				
 			if "x-lliurex-nia" in properties_dic:
-				user.properties["x-lliurex-nia"]=properties_dic["x-lliurex-nia"][0]
+				user.properties["x-lliurex-nia"]=properties_dic["x-lliurex-nia"][0].decode("utf-8")
 				
 			if "x-lliurex-nif" in properties_dic:
-				user.properties["x-lliurex-nif"]=properties_dic["x-lliurex-nif"][0]
+				user.properties["x-lliurex-nif"]=properties_dic["x-lliurex-nif"][0].decode("utf-8")
 			
-			if user.properties["uid"] in admins_list:
+			if user.properties["uid"].encode("utf-8") in admins_list:
 				user.properties["is_admin"]=True
 			else:
 				user.properties["is_admin"]=False
 			
 			user_list.append(user)
 			 
-			
 		return user_list		
 		
 	#def search_user
@@ -1538,7 +1547,7 @@ class LdapManager:
 				profile="admin"			
 			
 			#user_list.append((properties_dic["uid"][0],path,properties_dic["cn"][0],properties_dic["sn"][0],desc))
-			user_list.append((path,properties_dic["uid"][0],properties_dic["uidNumber"][0],properties_dic["cn"][0],properties_dic["sn"][0],profile))
+			user_list.append((path,properties_dic["uid"][0].decode("utf-8"),properties_dic["uidNumber"][0].decode("utf-8"),properties_dic["cn"][0].decode("utf-8"),properties_dic["sn"][0].decode("utf-8"),profile))
 			
 			
 		return user_list			
@@ -1774,13 +1783,26 @@ class LdapManager:
 		
 		path="ou=Managed,ou=Groups,"+self.llxvar("LDAP_BASE_DN")
 		result=self.ldap.search_s(path,ldap.SCOPE_SUBTREE)
+
 		group_list=[]
 		for group in result:
 			g_path,dic=group
 			dic["path"]=g_path
-			if "posixGroup" in dic["objectClass"]:
+			if b"posixGroup" in dic["objectClass"]:
+				dic["cn"][0]=dic["cn"][0].decode("utf-8")
+				dic["description"][0]=dic["description"][0].decode("utf-8")
+				dic["gidNumber"][0]=dic["gidNumber"][0].decode("utf-8")
+				dic["x-lliurex-grouptype"][0]=dic["x-lliurex-grouptype"][0].decode("utf-8")
+				
+				if "memberUid" in dic:
+					count=0
+					for member in dic["memberUid"]:
+						dic["memberUid"][count]=member.decode("utf-8")
+						count+=1
+				
 				group_list.append(dic)
-					
+		
+		
 		return group_list	
 		
 	#def get_available_groups
@@ -1892,12 +1914,12 @@ class LdapManager:
 			group.attributes.append(("gidNumber",str(gidNumber)))
 			group.attributes.append(("sambaSID",self.samba_id+"-"+str(gidNumber)))
 			group.attributes.append(("sambaGroupType",str(2)))
-			self.ldap.add_s(path,group.attributes)
+			self.ldap.add_s(path,self.str_to_bytes(group.attributes))
 			return "true"
 		except Exception as e:
 			self.log("add_group",e)
 			print(e)
-			return e[0]["desc"]
+			return str(e)
 		
 	#def add_group
 	
@@ -1970,17 +1992,17 @@ class LdapManager:
 				path,dic=item
 				user={}
 				if "userPassword" in dic:
-					user['passwd']=dic["userPassword"][0]
+					user['passwd']=dic["userPassword"][0].decode("utf-8")
 				if "sambaNTPassword" in dic:
-					user['sambaNTPassword']=dic["sambaNTPassword"][0]
+					user['sambaNTPassword']=dic["sambaNTPassword"][0].decode("utf-8")
 				if "sambaLMPassword" in dic:
-					user['sambaLMPassword']=dic["sambaLMPassword"][0]
+					user['sambaLMPassword']=dic["sambaLMPassword"][0].decode("utf-8")
 				if "sn" in dic:
-					user['sn']=dic["sn"][0]
+					user['sn']=dic["sn"][0].decode("utf-8")
 				if "cn" in dic:
-					user['cn']=dic["cn"][0]
+					user['cn']=dic["cn"][0].decode("utf-8")
 				if "uid" in dic:
-					user['uid']=dic["uid"][0]
+					user['uid']=dic["uid"][0].decode("utf-8")
 				ret_list.append(user)
 			except Exception as e:
 				pass
@@ -2005,17 +2027,17 @@ class LdapManager:
 				path,dic=item
 				user={}
 				if "userPassword" in dic:
-					user['passwd']=dic["userPassword"][0]
+					user['passwd']=dic["userPassword"][0].decode("utf-8")
 				if "sambaNTPassword" in dic:
-					user['sambaNTPassword']=dic["sambaNTPassword"][0]
+					user['sambaNTPassword']=dic["sambaNTPassword"][0].decode("utf-8")
 				if "sambaLMPassword" in dic:
-					user['sambaLMPassword']=dic["sambaLMPassword"][0]
+					user['sambaLMPassword']=dic["sambaLMPassword"][0].decode("utf-8")
 				if "sn" in dic:
-					user['sn']=dic["sn"][0]
+					user['sn']=dic["sn"][0].decode("utf-8")
 				if "cn" in dic:
-					user['cn']=dic["cn"][0]
+					user['cn']=dic["cn"][0].decode("utf-8")
 				if "uid" in dic:
-					user['uid']=dic["uid"][0]
+					user['uid']=dic["uid"][0].decode("utf-8")
 				ret_list.append(user)
 			except Exception as e:
 				pass
@@ -2174,9 +2196,9 @@ class LdapManager:
 		lst=[]
 		for x,y in users:
 			if "x-lliurex-freeze" in y:
-				if y["x-lliurex-freeze"][0]=="True":
-					lst.append(y["uid"][0])
-					
+				if y["x-lliurex-freeze"][0]==b"True":
+					lst.append(y["uid"][0].decode("utf-8"))
+		
 		return lst
 		
 		
@@ -2191,9 +2213,9 @@ class LdapManager:
 		lst=[]
 		for x,y in groups:
 			if "x-lliurex-freeze" in y:
-				if y["x-lliurex-freeze"][0]=="True":
-					lst.append(y["cn"][0])
-					
+				if y["x-lliurex-freeze"][0]==b"True":
+					lst.append(y["cn"][0].decode("utf-8"))
+		
 		return lst
 		
 	#def get_frozen_groups

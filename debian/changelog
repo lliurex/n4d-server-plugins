@@ -1,3 +1,10 @@
+n4d-server-plugins (0.205) focal; urgency=medium
+
+  * import/export llum info working
+  * password lists working 
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 27 May 2021 11:52:00 +0200
+
 n4d-server-plugins (0.204) focal; urgency=medium
 
   * Most functions are now ported. Needs more testing

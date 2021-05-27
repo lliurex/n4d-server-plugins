@@ -10,11 +10,8 @@ import threading
 import time
 import passlib.hash
 import grp
-
-
 import unicodedata
 import syslog
-
 import os
 import os.path
 
@@ -22,7 +19,6 @@ import n4d.server.core
 
 
 base_home_dir="/home/"
-
 LDAP_LOG="/var/log/n4d/ldap"
 
 #uid=pepe,ou=Admins,ou=People,dc=ma5,dc=lliurex,dc=net
@@ -1132,6 +1128,7 @@ class LdapManager:
 				
 				
 				if generated_dic!=None:
+					
 					if group_type!=None:
 						self.add_to_group_type(group_type,generated_dic["uid"])
 						if "groups" not in generated_dic:

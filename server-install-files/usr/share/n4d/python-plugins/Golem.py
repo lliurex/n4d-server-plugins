@@ -322,7 +322,6 @@ class Golem:
 
 			dic["exception"]=inst
 			print(inst)
-		
 			return n4d.responses.build_failed_call_response("false")
 		
 	#def change_own_password
@@ -1001,14 +1000,12 @@ class Golem:
 	def export_llum_info(self):
 		
 		try:
-		
-			user_list=self.get_user_list("*")
-			slist=self.get_students_passwords()
-			tlist=self.get_teachers_passwords_encrypted()
-			pwd_list=self.quicksort(slist+tlist)
-	
-			groups=self.get_available_groups()
 			
+			user_list=self.get_user_list("*")["return"]
+			slist=self.get_students_passwords()["return"]
+			tlist=self.get_teachers_passwords_encrypted()["return"]
+			pwd_list=self.quicksort(slist+tlist)
+			groups=self.get_available_groups()["return"]
 			exported_groups={}
 			exported_users={}
 		
@@ -1020,7 +1017,7 @@ class Golem:
 				else:
 					exported_groups[item["cn"][0]]["members"]=[]
 				exported_groups[item["cn"][0]]["description"]=item["description"][0]
-				
+		
 			for item in user_list:
 				
 				if item["profile"]=="teachers":
@@ -1046,7 +1043,6 @@ class Golem:
 				if "x-lliurex-nif" in item:
 					exported_users[item["uid"]]["x-lliurex-nif"]=item["x-lliurex-nif"]
 
-
 			for item in pwd_list:
 				if item["uid"] in exported_users:
 					exported_users[item["uid"]]["userPassword"]=item["passwd"]
@@ -1054,7 +1050,7 @@ class Golem:
 					exported_users[item["uid"]]["sambaLMPassword"]=item["sambaLMPassword"]
 				
 
-			tmp_pwd=self.get_teachers_passwords()
+			tmp_pwd=self.get_teachers_passwords()["return"]
 
 			for teacher in tmp_pwd:
 				if teacher["uid"] in exported_users:
@@ -1067,6 +1063,7 @@ class Golem:
 			return n4d.responses.build_successful_call_response([True,exported])
 		
 		except Exception as e:
+			print(e)
 			return n4d.responses.build_successful_call_response([False,str(e)])
 		
 						
@@ -1102,8 +1099,9 @@ class Golem:
 			
 		#def sort_users_by_uidNumber
 		
-		exported_info=sort_users_by_uidNumber(exported_info)
 		
+		exported_info=sort_users_by_uidNumber(exported_info)
+
 				
 		skipped=[]
 		skipped_uidn=[]
@@ -1146,12 +1144,12 @@ class Golem:
 					properties["x-lliurex-nif"]=exported_info["users"][uidn]["x-lliurex-nif"]
 
 				profile=exported_info["users"][uidn]["profile"]
-				
-				if int(uids[profile]) > properties["uidNumber"] :
+
+				if int(uids[profile]) > int(properties["uidNumber"]) :
 					#print("Skipping %s ..."%user)
 					skipped.append(user)
 					continue
-				
+
 				self.ldap.set_xid(profile,properties["uidNumber"])
 				uids[profile]=properties["uidNumber"]
 				self.ldap.xid_counters[profile]=str(uids[profile])
@@ -1161,7 +1159,7 @@ class Golem:
 				
 				if "true" in str(ret):
 					if "uidNumber" in properties:
-						if uids[profile] < int(properties["uidNumber"]):
+						if int(uids[profile]) < int(properties["uidNumber"]):
 							uids[profile]=int(properties["uidNumber"])
 							
 					if profile=="Teachers":

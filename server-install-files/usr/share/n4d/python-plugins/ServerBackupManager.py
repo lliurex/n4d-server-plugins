@@ -8,6 +8,7 @@ import configparser as ConfigParser
 
 import n4d.server.core
 import n4d.responses
+import n4d.utils
 
 class ServerBackupManager:
 
@@ -46,7 +47,7 @@ class ServerBackupManager:
 		
 		if os.path.exists(path):
 			
-			file_name=path+"/"+self.core.get_backup_name("ServerBackup")
+			file_name=path+"/"+n4d.utils.get_backup_name("ServerBackup")
 			tar=tarfile.open(file_name,"w:gz")
 			
 			f=open(path+"/backup_files.conf","w")

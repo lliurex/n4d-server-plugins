@@ -1307,7 +1307,7 @@ class Golem:
 	def regenerate_net_files(self,mode=0):
 		
 		try:
-			ret=self.light_get_user_list()
+			ret=self.light_get_user_list()["return"]
 			users=[]
 			for item in ret:
 				user={}
@@ -1330,8 +1330,8 @@ class Golem:
 				
 			return n4d.responses.build_successful_call_response()
 			
-		except:
-			n4d.responses.build_failed_call_response()
+		except Exception as e:
+			return n4d.responses.build_failed_call_response()
 		
 	#def regenerate_net_files
 	

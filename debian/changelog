@@ -1,3 +1,9 @@
+n4d-server-plugins (0.208) focal; urgency=medium
+
+  * Fixed ldapmanager full_search encoding
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 10 Jun 2021 09:51:07 +0200
+
 n4d-server-plugins (0.207) focal; urgency=medium
 
   * fixed golem.regenerate_net_files function

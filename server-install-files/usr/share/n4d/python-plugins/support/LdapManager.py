@@ -1356,8 +1356,18 @@ class LdapManager:
 					try:
 						if key!="objectClass":
 							d[path][key]=info[key][0]
+							if type(d[path][key])==bytes:
+								d[path][key]=d[path][key].decode("utf-8")
 						else:
-							d[path][key]=info[key]
+							tmp=[]
+							for o in info[key]:
+								if type(o)==bytes:
+									o=o.decode("utf-8")
+								tmp.append(o)
+							d[path][key]=tmp
+							
+						
+							
 					except Exception as e:
 						if "exception" not in d[path]:
 							d[path]["exception"]=[]
@@ -1382,8 +1392,18 @@ class LdapManager:
 				try:
 					if key!="objectClass" and key!="memberUid":
 						d[path][key]=info[key][0]
+						if type(d[path][key])==bytes:
+							d[path][key]=d[path][key].decode("utf-8")
 					else:
-						d[path][key]=info[key]
+						for o in info[key]:
+							tmp=[]
+							for o in info[key]:
+								if type(o)==bytes:
+									o=o.decode("utf-8")
+								tmp.append(o)
+						d[path][key]=tmp
+						
+					
 					
 				except Exception as e:
 					print((path,e))
@@ -1404,12 +1424,21 @@ class LdapManager:
 			
 			d={}
 			d[path]={}
-			d[path]["objectClass"]=info["objectClass"]
+			tmp=[]
+			for o in info["objectClass"]:
+				if type(o)==bytes:
+					o=o.decode("utf-8")
+				tmp.append(o)
+			d[path]["objectClass"]=tmp
 			if "ou" in info:
 				
 				try:
 					d[path]["ou"]=info["ou"][0]
 					d[path]["x-lliurex-xid-counter"]=info["x-lliurex-xid-counter"][0]
+					if type(d[path]["ou"])==bytes:
+						d[path]["ou"]=d[path]["ou"].decode("utf-8")
+					if type(d[path]["x-lliurex-xid-counter"])==bytes:
+						d[path]["x-lliurex-xid-counter"]=d[path]["x-lliurex-xid-counter"].decode("utf-8")
 				except Exception as e:
 					d[path]["exception"]=[]
 					d[path]["exception"].append(str(e))
@@ -1418,8 +1447,17 @@ class LdapManager:
 					try:
 						if key!="memberUid" and key!="ObjectClass":
 							d[path][key]=info[key][0]
+							if type(d[path][key])==bytes:
+								d[path][key]=d[path][key].decode("utf-8")
 						else:
-							d[path][key]=info[key]
+							for o in info[key]:
+								tmp=[]
+								for o in info[key]:
+									if type(o)==bytes:
+										o=o.decode("utf-8")
+									tmp.append(o)
+							d[path][key]=tmp
+						
 						
 						
 					except Exception as e:

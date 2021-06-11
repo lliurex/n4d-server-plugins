@@ -1828,13 +1828,22 @@ class LdapManager:
 				dic["description"][0]=dic["description"][0].decode("utf-8")
 				dic["gidNumber"][0]=dic["gidNumber"][0].decode("utf-8")
 				dic["x-lliurex-grouptype"][0]=dic["x-lliurex-grouptype"][0].decode("utf-8")
+				dic["sambaSID"][0]=dic["sambaSID"][0].decode("utf-8")
+				dic["sambaGroupType"][0]=dic["sambaGroupType"][0].decode("utf-8")
 				
 				if "memberUid" in dic:
 					count=0
 					for member in dic["memberUid"]:
 						dic["memberUid"][count]=member.decode("utf-8")
 						count+=1
-				
+						
+				i_count=0
+				for item in dic["objectClass"]:
+					if type(item)==bytes:
+						dic["objectClass"][i_count]=item.decode("utf-8")
+						
+					i_count+=1
+					
 				group_list.append(dic)
 		
 		

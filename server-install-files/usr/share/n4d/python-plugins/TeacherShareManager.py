@@ -7,12 +7,16 @@ import shutil
 import pwd
 import tempfile
 
+import n4d.responses
+
 
 NET_FOLDER="/net/server-sync/home/.lliurex-harvester/"
 
 
 
 class TeacherShareManager:
+
+	ADD_PATH_ERROR=-10
 
 	def __init__(self):
 		
@@ -31,7 +35,7 @@ class TeacherShareManager:
 				print e
 			'''
 					
-		return True
+		return n4d.responses.build_successful_call_response()
 		
 	#def remove_path
 	
@@ -68,7 +72,7 @@ class TeacherShareManager:
 			os.chmod(tmp,0o703)
 			os.chmod(dir,0o703)
 			os.umask(prevmask)		
-			return True
+			return n4d.responses.build_successful_call_response()
 			
 		except Exception as e:
 			
@@ -79,7 +83,7 @@ class TeacherShareManager:
 				
 			os.umask(prevmask)
 			
-			return False
+			return n4d.responses.build_failed_call_response(ADD_PATH_ERROR,str(e))
 		
 	#def add_user
 	
@@ -91,11 +95,11 @@ class TeacherShareManager:
 			if orig_path[len(orig_path)-1]!="/":
 				orig_path+="/"
 			if path==orig_path:
-				return True
+				return n4d.responses.build_successful_call_response(True)
 			else:
-				return False			
+				return n4d.responses.build_successful_call_response(False)
 		else:
-			return False
+			return n4d.responses.build_successful_call_response(False)
 		
 	#def is_configured
 	
@@ -103,13 +107,13 @@ class TeacherShareManager:
 		
 		self.paths={}
 		
-		return True
+		return n4d.responses.build_successful_call_response(True)
 		
 	#def clear_paths
 	
 	def get_paths(self):
 		
-		return self.paths
+		return n4d.responses.build_successful_call_response(self.paths)
 		
 	#def get_paths
 

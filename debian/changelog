@@ -1,3 +1,9 @@
+n4d-server-plugins (0.210) focal; urgency=medium
+
+  * Fixed iptablesmanager
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 28 Jun 2021 11:01:16 +0200
+
 n4d-server-plugins (0.209) focal; urgency=medium
 
   * Fixed encoding in ldapmanager.get_available_groups

@@ -34,7 +34,7 @@ class IptablesManager:
 				cmd=self.iptables_tc_skel%("I",eth,user)
 				os.system(cmd)
 			
-			return 0
+			return n4d.responses.build_successful_call_response(0)
 			
 		#fat
 
@@ -42,7 +42,7 @@ class IptablesManager:
 			cmd=self.iptables_fc_skel%("I",ip)
 			os.system(cmd)
 		
-		return 1
+		return n4d.responses.build_successful_call_response(1)
 		
 		
 	#def block_user
@@ -62,7 +62,7 @@ class IptablesManager:
 				cmd=self.iptables_tc_skel%("D",eth,user)
 				os.system(cmd)
 				
-			return 0
+			return n4d.responses.build_successful_call_response(0)
 		
 		#fat
 		if ip in self.blocked_list:
@@ -70,16 +70,18 @@ class IptablesManager:
 			cmd=self.iptables_fc_skel%("D",ip)
 			os.system(cmd)
 
-		return 1
+		return n4d.responses.build_successful_call_response(1)
 		
 	#def unblock_user
 	
 	def is_blocked(self,item):
 		
+		ret=False
+		
 		if item in self.blocked_list:
-			return True
+			ret=True
 			
-		return False
+		return n4d.responses.build_successful_call_response(ret)
 		
 	#def is_user_blocked
 	
@@ -87,7 +89,7 @@ class IptablesManager:
 	def blocked_list(self):
 		
 		self.get_iptables_list()
-		return self.blocked_list()
+		return n4d.responses.build_successful_call_response(self.blocked_list())
 		
 	#def blocked_list
 	

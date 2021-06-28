@@ -1,0 +1,34 @@
+{
+    "SETUP": {
+        "type": "python",
+        "path": "IptablesManager.py",
+        "class": "IptablesManager"
+    },
+    "METHODS": {
+        "block": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "unblock": {
+            "allowed_groups": [
+                "sudo",
+                "admins",
+		"teachers"
+            ]
+        },
+        "is_blocked": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        },
+        "blocked_list": {
+            "allowed_groups": [
+                "anonymous"
+            ]
+        }
+        
+    }
+}

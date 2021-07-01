@@ -577,7 +577,7 @@ class LdapManager:
 			try:
 				url=self.llxvar("MASTER_SERVER_IP")
 				if url!=None:
-					url="ldap://"+url
+					url="ldap://"+url["ip"]
 					remote=True
 			except Exception as e:
 				print((e,""))
@@ -1962,7 +1962,6 @@ class LdapManager:
 			return "true"
 		except Exception as e:
 			self.log("add_group",e)
-			print(e)
 			return str(e)
 		
 	#def add_group

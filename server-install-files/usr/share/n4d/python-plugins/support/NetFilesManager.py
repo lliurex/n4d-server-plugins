@@ -5,6 +5,8 @@ import os.path
 import grp
 import pwd
 import pipes
+import time
+import imp 
 
 import n4d.server.core
 
@@ -163,8 +165,13 @@ class NetFilesManager:
 			os.chmod(self.groups_path+group_name,0o750)
 
 		try:
-
+			gid=None
+			# seems slaves are slow to detect new groups and need a sleep.
+			# i would love to remove this
+			if self.core.get_variable("MASTER_SERVER_IP")["return"]!=None:
+				time.sleep(0.8)
 			gid=grp.getgrnam(group_name).gr_gid
+
 			os.chown(self.groups_path+group_name,0,int(gid))
 			#command="setfacl %s '%s'"%(" ".join(self.acls),pipes.quote(self.groups_path+group_name))
 			command='setfacl %s "%s"'%(" ".join(self.acls),self.groups_path+group_name)

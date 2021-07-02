@@ -11,6 +11,12 @@ import n4d.responses
 import n4d.utils
 
 class ServerBackupManager:
+	
+	RESTORE_ERROR=-10
+	RESTORE_FILE_NOT_FOUND_ERROR=-15
+	RESTORE_UNKNOWN_ERROR=-30
+	
+	FINAL_OPERATIONS_ERROR=-50
 
 	def __init__(self):
 		
@@ -65,8 +71,17 @@ class ServerBackupManager:
 						else:
 							e=Exception(tmp["msg"])
 							raise e
+					
+					elif service=="VariablesManager":
+						tmp=self.core.variables_manager.backup(path)
+						if tmp["status"]==0:
+							ret[service]=tmp["return"]
+						else:
+							e=Exception(tmp["msg"])
+							raise e
+					
 					else:
-						tmp=self.core.get_plugin[service].backup(path)
+						tmp=self.core.get_plugin(service).backup(path)
 						if tmp["status"]==0:
 							ret[service]=tmp["return"]
 						else:
@@ -133,8 +148,20 @@ class ServerBackupManager:
 					for items in cfg.items("ServerBackupManager"):
 						key,value=items
 						try:
-							if key in objects:
-								ret[key]=objects[key].restore(tmp_dir+"/"+value)
+							if key=="VariablesManager":
+								tmp=self.core.variables_manager.restore(tmp_dir+"/"+value)
+								if tmp["status"]==0:
+									ret[key]=[True,""]
+								else:
+									ret[key]=[False,ret["msg"]]
+								
+							elif self.core.is_plugin_available(key):
+								tmp=self.core.get_plugin(key).restore(tmp_dir+"/"+value)
+								if tmp["status"]==0:
+									ret[key]=[True,""]
+								else:
+									ret[key]=[False,ret["msg"]]
+								#ret[key]=self.core.get_plugin(key).restore(tmp_dir+"/"+value)
 
 							else:
 								ret[key]=[False,"Plugin not found"]
@@ -156,19 +183,20 @@ class ServerBackupManager:
 					
 					self.final_operations()
 					self.restoring_version=None
-					return [True,ret]
+					return n4d.responses.build_successful_call_response(ret)
 					
 				except Exception as e:
-					return [False,str(e)]
+					return n4d.responses.build_failed_call_response(RESTORE_ERROR,str(e))
 					
 			else:
+				return n4d.responses.build_failed_call_response(RESTORE_FILE_NOT_FOUND_ERROR,"Backup file not found")
 				return [False,{},"File not found"]
 			
 		else:
-			return [False,{},"File not found"]
+			return n4d.responses.build_failed_call_response(RESTORE_FILE_NOT_FOUND_ERROR,"Backup file not found")
 			
 	
-		return [False,{},"Failed. Did nothing"]
+		return n4d.responses.build_failed_call_response(RESTORE_UNKNOWN_ERROR,"Nothing was done")
 		
 		
 	#def server_basics_restore
@@ -178,10 +206,10 @@ class ServerBackupManager:
 		
 
 		try:
-			objects["Golem"].startup(None)
-			objects["NetFoldersManager"].startup(None)
+			self.core.get_plugin("Golem").startup(None)
+			self.core.get_plugin("NetFoldersManager").startup(None)
 						
-			for item in objects["Golem"].light_get_user_list():
+			for item in self.core.get_plugin("Golem").light_get_user_list()["return"]:
 				
 				user_info={}
 				user_info["profile"]=item[5]
@@ -192,17 +220,14 @@ class ServerBackupManager:
 				except:
 					pass
 						
-			objects["Golem"].restore_groups_folders()
-			#Enable acls and roadmin just in case
-			command='/usr/share/n4d-samba/one-shots/add-roadmin-user.py'
-			exitStatus=os.system(command)
-			objects["SlapdManager"].load_acls()
-
-			objects["ZeroServerWizardManager"].end_operations()
+			self.core.get_plugin("Golem").restore_groups_folders()
+			self.core.get_plugin("ZeroServerWizardManager").end_operations()
+			
+			return n4d.responses.build_successful_call_response()
 					
 		except Exception as e:
 				
-			print(e)
+			return n4d.responses.build_failed_call_response(FINAL_OPERATIONS_ERROR,str(e))
 
 		
 	#def final_operations

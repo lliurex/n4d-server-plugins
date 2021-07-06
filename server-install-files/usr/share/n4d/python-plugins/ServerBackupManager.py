@@ -20,7 +20,7 @@ class ServerBackupManager:
 
 	def __init__(self):
 		
-		self.backup_list=["VariablesManager","Hostname","NetworkManager","DnsmasqManager","N4dProxy","SlapdManager","PamnssPlugin","SambaManager"]
+		self.backup_list=["VariablesManager","Hostname","NetworkManager","DnsmasqManager","SlapdManager","PamnssPlugin","SambaManager"]
 		#self.backup_list=["VariablesManager","Hostname","NetworkManager","Dnsmasq","N4dProxy","SlapdManager","PamnssPlugin","SambaManager","NetFoldersManager","MysqlManager","CupsManager","ApacheManager"]
 		self.core=n4d.server.core.Core.get_core()
 		

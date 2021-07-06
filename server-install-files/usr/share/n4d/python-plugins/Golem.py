@@ -40,13 +40,13 @@ class Golem:
 			obj3=imp.load_source("NetFilesManager",Golem.SUPPORT_PATH + "NetFilesManager.py")
 			obj4=imp.load_source("PasswordManager",Golem.SUPPORT_PATH + "PasswordManager.py")
 			obj5=imp.load_source("GesItaManager",Golem.SUPPORT_PATH + "GesItaManager.py")
-			#obj6=imp.load_source("FileOperations",Golem.SUPPORT_PATH + "FileOperations.py")
+			obj6=imp.load_source("FileOperations",Golem.SUPPORT_PATH + "FileOperations.py")
 			obj7=imp.load_source("PeterPan",Golem.SUPPORT_PATH + "PeterPan.py")
 			self.ldap=self.obj.LdapManager()
 			self.netfiles=obj3.NetFilesManager()
 			self.pw=obj4.PasswordManager()
 			self.itaca=obj5.GesItaManager()
-			#self.file_operations=obj6.FileOperations()
+			self.file_operations=obj6.FileOperations()
 			self.peter_pan=obj7.PeterPan()
 			self.try_count=0
 			self.sharefunctions = {}
@@ -865,13 +865,21 @@ class Golem:
 	#def gescen_info
 
 	def gescen_groups(self):
-		return n4d.responses.build_successful_call_response(self.itaca.get_groups())
+		groups=self.itaca.get_groups()
+		count=0
+		for group in groups:
+			if type(group)==bytes:
+				group=group.decode("utf-8")
+				groups[count]=group
+			count+=1
+			
+		return n4d.responses.build_successful_call_response(groups)
 	#def gescen_group
 
 	def gescen_partial(self,group_list):
 		#print "partial"
 		#print group_list
-		self.sharefunctions['generate_uid'] = generate_uid
+		self.sharefunctions['generate_uid'] = self.ldap.generate_uid
 		users_added = self.itaca.partial_import(group_list)
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('gescen_partial'),{})
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','add_user',users_added)
@@ -882,14 +890,16 @@ class Golem:
 	def gescen_full(self):
 
 		try:
-			self.sharefunctions['generate_uid'] = generate_uid
+			self.sharefunctions['generate_uid'] = self.ldap.generate_uid
 		except Exception as e:
 			print(e)
 			n4d.responses.build_failed_call_response()
 
 		ret,users_added=self.itaca.full_import()
+
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('gescen_full'),{})
 		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','add_user',users_added)
+
 		return n4d.responses.build_successful_call_response(ret)
 	#def gescen_full
 	

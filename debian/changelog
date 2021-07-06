@@ -1,3 +1,11 @@
+n4d-server-plugins (0.213) focal; urgency=medium
+
+  * Fixes in serverbackupmanager
+  * fixed get_groups in ldapmanager
+  * Added gescen-itaca import support
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 06 Jul 2021 13:15:28 +0200
+
 n4d-server-plugins (0.212) focal; urgency=medium
 
   * Trying to make backups work

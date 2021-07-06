@@ -420,16 +420,12 @@ class LdapManager:
 		
 	#def generate_random_ssha_password
 	
+	
+	
 	def generate_ssha_password(self,password):
-		
-		salt=self.getsalt().encode("utf-8")
-			
-		
-		return "{SSHA}" + base64.encodebytes(hashlib.sha1(password + salt).digest() + salt).decode('utf-8')
-		#ret="{SSHA}" + base64.b64encode(hashlib.sha1(password.decode("utf-8") + salt).digest() + salt)
-		#return ret
-		
-	#def generate_ssha_password	
+		salt=self.str_to_bytes(self.getsalt())
+		return "{SSHA}" + base64.encodebytes(hashlib.sha1(self.str_to_bytes(password) + salt).digest() + salt).decode('utf-8')
+	#def generate_ssha_password  	
 	
 	
 	
@@ -688,13 +684,12 @@ class LdapManager:
 				user.properties["userPassword"]=password
 			
 		elif (plantille=="Teachers"):
-
 			groupinfo=grp.getgrnam('teachers')
 			gidNumber=groupinfo[2]
 			user.properties["gidNumber"]=str(gidNumber)
 			user.properties["profile"]="teachers"
 			cn="teaID"
-			
+
 			if  "userPassword" not in properties:
 				ssha_password,password=self.generate_random_ssha_password()
 				user.properties["userPassword"]=password
@@ -725,18 +720,18 @@ class LdapManager:
 			if "userPassword" not in properties:
 				ssha_password,password=self.generate_random_ssha_password()
 				user.properties["userPassword"]=password	
-				
+		
+	
 		if "userPassword" in properties:
 			password=user.properties['userPassword']
 			
 		#else password variable should be available... it SHOULD 
 		
-		
 		if "sambaNTPassword" not in user.properties:
 			user.properties['sambaNTPassword']=passlib.hash.nthash.encrypt(password).upper()
 		if "sambaLMPassword" not in user.properties:
 			user.properties['sambaLMPassword']=passlib.hash.lmhash.encrypt(password).upper()
-			
+		
 		user.properties['sambaPwdLastSet']=str(int(time.time()))
 		
 		path="uid="+user.uid+","+ "ou="+plantille+",ou=People," + self.llxvar("LDAP_BASE_DN")
@@ -751,8 +746,6 @@ class LdapManager:
 			uidNumber=user.properties["uidNumber"]
 			
 		user.properties['sambaSID']=self.samba_id+"-"+user.properties["uidNumber"]
-		
-
 		
 
 		# ADD USER
@@ -1251,7 +1244,7 @@ class LdapManager:
 		mod_list=[]
 		mod_list.append(mod)
 			
-		print("*** ADDING " + uid + " to " + path)
+		#print("*** ADDING " + uid + " to " + path)
 		try:
 			mod_list=self.str_to_bytes(mod_list)
 			self.ldap.modify_s(path,mod_list)
@@ -1715,7 +1708,6 @@ class LdapManager:
 	def delete_student(self,uid):
 	
 		try:
-
 			group_list=self.get_groups(uid)
 			for group in group_list:
 				self.del_user_from_group(uid,group)
@@ -1732,6 +1724,7 @@ class LdapManager:
 
 			
 		except Exception as e:
+			print(e)
 			self.log("delete_student",e,uid)
 			return e[0]['desc']
 			
@@ -1797,6 +1790,9 @@ class LdapManager:
 	@ldapmanager_connect
 	def get_groups(self,uid):
 		
+		if type(uid)==str:
+			uid=uid.encode("utf-8")
+		
 		path="ou=Managed,ou=Groups,"+self.llxvar("LDAP_BASE_DN")
 		result=self.ldap.search_s(path,ldap.SCOPE_SUBTREE)
 		group_list=[]
@@ -1855,6 +1851,8 @@ class LdapManager:
 	@ldapmanager_connect
 	def get_generic_groups(self,uid):
 		
+		if type(uid)==str:
+			uid=uid.encode("utf-8")
 		
 		path="ou=System,ou=Groups,"+self.llxvar("LDAP_BASE_DN")
 		result=self.ldap.search_s(path,ldap.SCOPE_SUBTREE)

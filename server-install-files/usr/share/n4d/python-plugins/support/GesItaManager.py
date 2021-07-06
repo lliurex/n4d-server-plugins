@@ -11,7 +11,7 @@ import n4d.server.core
 class GrupGes:
 	def __init__(self):
 		self.attributes = {}
-		self.memmbers = []
+		self.members = []
 	#def __init__
 	
 class UserGes:
@@ -64,8 +64,11 @@ class GesItaManager:
 					auxgroup = GrupGes()
 					for auxattrib in group:
 						if auxattrib.text != None:
-							auxgroup.attributes[auxattrib.tag] = auxattrib.text.encode('utf-8')
-					self.groups[auxgroup.attributes['codi']] = auxgroup
+							auxgroup.attributes[auxattrib.tag] = auxattrib.text
+					g=auxgroup.attributes['codi']
+					if type(g)==bytes:
+						g=g.decode("utf-8")
+					self.groups[g] = auxgroup
 			
 			self.groups["sense_grup"] = GrupGes()
 			self.groups["sense_grup"].attributes["codi"]="sense_grup"
@@ -77,26 +80,24 @@ class GesItaManager:
 					auxuser = UserGes()
 					for auxattrib in student:
 						if auxattrib.text != None:
-							auxuser.attributes[auxattrib.tag] = auxattrib.text.encode('utf-8')
+							auxuser.attributes[auxattrib.tag] = auxattrib.text
 					self.students.append(auxuser)
 					try:
-							self.groups[auxuser.attributes['grup']].memmbers.append(auxuser)
+							self.groups[auxuser.attributes['grup']].members.append(auxuser)
 					
 					except Exception as e:
 							auxuser.attributes["grup"]="sense_grup"
-							self.groups["sense_grup"].memmbers.append(auxuser)
+							self.groups["sense_grup"].members.append(auxuser)
 				
-
-							
-							
 			listofteachers = root.find("professors")
 			if listofteachers != None:
 				for teacher in listofteachers:
 					auxuser = UserGes()
 					for auxattrib in teacher:
 						if auxattrib.text != None:
-							auxuser.attributes[auxattrib.tag] = auxattrib.text.encode('utf-8')
+							auxuser.attributes[auxattrib.tag] = auxattrib.text
 					self.teachers.append(auxuser)
+			
 			return True
 		return False
 					
@@ -120,7 +121,7 @@ class GesItaManager:
 		itacagroups = self.get_groups()
 		for groupname in listgroups:
 			if groupname in itacagroups:
-				listofusers = self.groups[groupname].memmbers
+				listofusers = self.groups[groupname].members
 				prop = {}
 				prop['cn'] = groupname
 				prop['description'] = self.groups[groupname].attributes['nom']
@@ -164,7 +165,6 @@ class GesItaManager:
 			self.golem.ldap.add_group(prop)
 			self.golem.peter_pan.execute_python_dir('/usr/share/n4d/hooks/gesitamanager',('add_group'),{'group':prop})
 			
-
 		for student in self.students:
 			try:
 				self.insert_user(student,'Students')
@@ -182,15 +182,14 @@ class GesItaManager:
 				if not best_effort:
 					raise e
 			
-			
 		try:
 			self.golem.restore_groups_folders()
-		except:
-			pass
+		except Exception as e:
+			print(e)
 		
 		for user in self.users_added:
 			user['group_type'] = user['profile'].capitalize()
-	
+
 		return self.usersfordelete,self.users_added
 	#def full_import
 		
@@ -206,24 +205,25 @@ class GesItaManager:
 			filter = "(x-lliurex-nif="+nif+")"
 			listuser = self.golem.ldap.search_user_with_filter(filter)
 			typefilter = "nif"
+
 		elif 'nia' in user.attributes and len(user.attributes['nia']) > 0:
 			nia = user.attributes['nia']
 			filter = "(x-lliurex-nia="+nia+")"
 			listuser = self.golem.ldap.search_user_with_filter(filter)
 			typefilter = "nia"
+
 		elif 'numeroExpedient' in user.attributes and len(user.attributes['numeroExpedient']) > 0:
 			lliurexrecord = user.attributes['numeroExpedient']
 			filter = "(x-lliurex-record="+lliurexrecord+")"
 			listuser = self.golem.ldap.search_user_with_filter(filter)
 			typefilter = "record"
-		
+			
 		if len(listuser) == 0:
 			filter = "(&(cn="+user.attributes['nom']+")(sn="+user.attributes['cognoms']+"))"
 			listuser = self.golem.ldap.search_user_with_filter(filter)
 			typefilter = "name and surname"
 		
 		if len(listuser) == 0:
-		
 			#
 			#	User not exist on Ldap. Create new user
 			#
@@ -231,7 +231,7 @@ class GesItaManager:
 			if 'uid' in user.attributes and len(user.attributes['uid']) >0:
 				useruid=user.attributes['uid']
 			else:
-				useruid = self.golem.sharefunctions['generate_uid'](user.attributes['nom'].decode('utf-8'),user.attributes['cognoms'].decode('utf-8'))
+				useruid = self.golem.sharefunctions['generate_uid'](user.attributes['nom'],user.attributes['cognoms'])
 		
 			#Create user
 			prop={}
@@ -240,7 +240,7 @@ class GesItaManager:
 			prop['sn'] = user.attributes['cognoms']
 			if 'numeroExpedient' in user.attributes:
 				prop['x-lliurex-record'] = user.attributes['numeroExpedient']
-		
+
 			if typeuser == 'Students':
 				if 'nif' in user.attributes:
 					prop['x-lliurex-nif'] = user.attributes["nif"]
@@ -260,8 +260,8 @@ class GesItaManager:
 				prop["userPassword"]=user.attributes['password']
 			
 			try:
+
 				user_list=self.golem.ldap.search_user(prop["uid"])
-		
 				if len(user_list)>0:
 					inserteduser = self.golem.ldap.add_user(True,typeuser,prop)
 				else:
@@ -271,38 +271,34 @@ class GesItaManager:
 				print(e)
 				return False
 				
-			
 			self.golem.netfiles.create_home(inserteduser)
 			
 			if typeuser == 'Students':
 				#Join to group
 				self.golem.ldap.add_to_group_type(user.attributes['grup'],inserteduser['uid'])
-				
 				self.golem.peter_pan.execute_python_dir('/usr/share/n4d/hooks/gesitamanager',('join_group'),{'group':{'cn':user.attributes['grup']},'user':inserteduser})
 			#Write password in file
+			
 			if typeuser == 'Teachers':
 				self.golem.pw.add_password(inserteduser["uid"],inserteduser['cn'],inserteduser['sn'],inserteduser["userPassword"])
+				
 			self.users_added.append(inserteduser)
 			return {"status":True,"msg":"New entry",}
 		else:
 			#
 			# User exist on system. Update parameters
 			#
-			
 			if len(listuser) > 1:
 				return {"status":False,"msg":"Duplicated " + typeuser}
 			else:
-				aux = listuser.keys()[0]
+				aux = list(listuser.keys())[0]
 				upgradeuser = listuser[aux]
-				
+				if type(upgradeuser["uid"])==bytes:
+					upgradeuser["uid"]=upgradeuser["uid"].decode("utf-8")
 				if typeuser == 'Students':
-					
 					groups = self.golem.ldap.get_groups(upgradeuser['uid'])
 					for auxgroup in groups:
-						
 						self.golem.ldap.del_user_from_group(upgradeuser['uid'],auxgroup)
-						
-						
 						self.golem.peter_pan.execute_python_dir('/usr/share/n4d/hooks/gesitamanager',('drop_group'),{'group':{'cn':auxgroup},'user':upgradeuser})
 					
 					self.golem.netfiles.exist_home_or_create(upgradeuser)

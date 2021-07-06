@@ -20,7 +20,7 @@ class ServerBackupManager:
 
 	def __init__(self):
 		
-		self.backup_list=["VariablesManager","Hostname","NetworkManager","Dnsmasq","N4dProxy","SlapdManager","PamnssPlugin","SambaManager"]
+		self.backup_list=["VariablesManager","Hostname","NetworkManager","DnsmasqManager","N4dProxy","SlapdManager","PamnssPlugin","SambaManager"]
 		#self.backup_list=["VariablesManager","Hostname","NetworkManager","Dnsmasq","N4dProxy","SlapdManager","PamnssPlugin","SambaManager","NetFoldersManager","MysqlManager","CupsManager","ApacheManager"]
 		self.core=n4d.server.core.Core.get_core()
 		
@@ -34,7 +34,7 @@ class ServerBackupManager:
 	
 	def get_basic_services_list(self):
 		
-		return self.backup_list
+		return n4d.responses.build_successful_call_response(self.backup_list)
 		
 	#def get_basic_services_list
 		
@@ -88,11 +88,11 @@ class ServerBackupManager:
 							e=Exception(tmp["msg"])
 							raise e
 						
-					if ret[service][0]:
-						fname=ret[service][1].split("/")[-1]
-						tar.add(ret[service][1],arcname=fname)
+					if tmp["status"]==0:
+						fname=ret[service]
+						tar.add(ret[service],arcname=fname)
 						f.write("%s=%s\n"%(service,fname))
-						os.remove(ret[service][1])	
+						os.remove(ret[service])	
 			
 				except Exception as e:
 					ret[service]=[False,str(e)]

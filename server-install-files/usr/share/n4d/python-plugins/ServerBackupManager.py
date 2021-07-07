@@ -89,7 +89,7 @@ class ServerBackupManager:
 							raise e
 						
 					if tmp["status"]==0:
-						fname=ret[service]
+						fname=ret[service].split("/")[-1]
 						tar.add(ret[service],arcname=fname)
 						f.write("%s=%s\n"%(service,fname))
 						os.remove(ret[service])	

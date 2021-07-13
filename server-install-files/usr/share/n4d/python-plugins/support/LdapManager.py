@@ -2212,7 +2212,7 @@ class LdapManager:
 				
 				
 				if "x-lliurex-freeze" in y:
-					if y["x-lliurex-freeze"][0]=="True":
+					if y["x-lliurex-freeze"][0]==b"True":
 						return True
 				
 			group_list=self.get_groups(uid)

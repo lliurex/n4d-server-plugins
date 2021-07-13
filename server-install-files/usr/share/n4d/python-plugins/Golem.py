@@ -895,12 +895,21 @@ class Golem:
 			print(e)
 			n4d.responses.build_failed_call_response()
 
-		ret,users_added=self.itaca.full_import()
+		try:
+			ret,users_added=self.itaca.full_import()
+		except Exception as e:
+			print(e)
+			return n4d.responses.build_failed_call_response()
+			
+		try:
 
-		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('gescen_full'),{})
-		self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','add_user',users_added)
-
+			self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/golem',('gescen_full'),{})
+			self.peter_pan.execute_python_dir('/usr/share/n4d/hooks/openmeetings','add_user',users_added)
+		except Exception as e:
+			print(e)
+		
 		return n4d.responses.build_successful_call_response(ret)
+		
 	#def gescen_full
 	
 	def empty_students(self,generic=None):

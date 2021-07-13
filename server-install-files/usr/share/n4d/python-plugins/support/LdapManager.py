@@ -117,7 +117,7 @@ class LdapUser:
 
 
 def strip_accents(s):
-	return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
+	return ''.join((c for c in unicodedata.normalize('NFKD', s) if unicodedata.category(c) != 'Mn'))
 
 
 def ldapmanager_connect(f):
@@ -447,7 +447,7 @@ class LdapManager:
 			if len(uid)==6:
 				break
 			
-		return uid
+		return strip_accents(uid)
 		
 		
 	#def generateUid
@@ -754,7 +754,9 @@ class LdapManager:
 			user_list=self.search_user(uid)
 			if len(user_list)>0:
 				raise ldap.ALREADY_EXISTS
-				
+			
+			
+			
 			self.ldap.add_s(path,self.str_to_bytes(user.get_modlist()))
 			group_list=self.add_to_generic_groups(plantille,user)
 			if group_list!=None:
@@ -763,7 +765,7 @@ class LdapManager:
 			return user.properties
 			
 		except Exception as exc:
-			
+			print(exc)
 			
 			if type(exc)==ldap.ALREADY_EXISTS:
 				if not generic_mode:
@@ -1604,7 +1606,8 @@ class LdapManager:
 					upgradeuser[key] = value
 			#upgradeuser['profile'] = x[1]['profile'][0]
 			
-				
+			if type(upgradeuser['uid'])==bytes:
+				upgradeuser['uid']=upgradeuser['uid'].decode("utf-8")
 			result[upgradeuser['uid']] = upgradeuser
 		return result
 	

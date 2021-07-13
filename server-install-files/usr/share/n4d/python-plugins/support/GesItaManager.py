@@ -268,19 +268,26 @@ class GesItaManager:
 					inserteduser= self.golem.ldap.add_user(False,typeuser,prop)
 
 			except Exception as e:
-				print(e)
+				print(e)			
 				return False
 				
 			self.golem.netfiles.create_home(inserteduser)
 			
 			if typeuser == 'Students':
 				#Join to group
-				self.golem.ldap.add_to_group_type(user.attributes['grup'],inserteduser['uid'])
-				self.golem.peter_pan.execute_python_dir('/usr/share/n4d/hooks/gesitamanager',('join_group'),{'group':{'cn':user.attributes['grup']},'user':inserteduser})
+				try:
+					self.golem.ldap.add_to_group_type(user.attributes['grup'],inserteduser['uid'])
+					self.golem.peter_pan.execute_python_dir('/usr/share/n4d/hooks/gesitamanager',('join_group'),{'group':{'cn':user.attributes['grup']},'user':inserteduser})
+				except Exception as e:
+					print(e)
+					raise e
 			#Write password in file
 			
 			if typeuser == 'Teachers':
-				self.golem.pw.add_password(inserteduser["uid"],inserteduser['cn'],inserteduser['sn'],inserteduser["userPassword"])
+				try:
+					self.golem.pw.add_password(inserteduser["uid"],inserteduser['cn'],inserteduser['sn'],inserteduser["userPassword"])
+				except Exception as e:
+					print(e)
 				
 			self.users_added.append(inserteduser)
 			return {"status":True,"msg":"New entry",}

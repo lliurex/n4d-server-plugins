@@ -447,7 +447,7 @@ class LdapManager:
 			if len(uid)==6:
 				break
 			
-		return strip_accents(uid)
+		return strip_accents(uid).lower()
 		
 		
 	#def generateUid

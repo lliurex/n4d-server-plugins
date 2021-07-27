@@ -1,3 +1,9 @@
+n4d-server-plugins (0.219) focal; urgency=medium
+
+  * Old bug. x-lliurex-grouptype is missing from llum exportation
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 27 Jul 2021 17:33:12 +0200
+
 n4d-server-plugins (0.218) focal; urgency=medium
 
   * making sure UIDs are in lower case

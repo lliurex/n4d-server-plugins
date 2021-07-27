@@ -1826,7 +1826,10 @@ class LdapManager:
 				dic["cn"][0]=dic["cn"][0].decode("utf-8")
 				dic["description"][0]=dic["description"][0].decode("utf-8")
 				dic["gidNumber"][0]=dic["gidNumber"][0].decode("utf-8")
-				dic["x-lliurex-grouptype"][0]=dic["x-lliurex-grouptype"][0].decode("utf-8")
+				if "X-lliurex-grouptype" in dic:
+					dic["x-lliurex-grouptype"][0]=dic["x-lliurex-grouptype"][0].decode("utf-8")
+				else:
+					dic["x-lliurex-grouptype"]="generic"
 				dic["sambaSID"][0]=dic["sambaSID"][0].decode("utf-8")
 				dic["sambaGroupType"][0]=dic["sambaGroupType"][0].decode("utf-8")
 				

@@ -3,7 +3,6 @@ class LessonManager:
 	def get_lesson(self,lesson):
 		
 		try:
-			print 1
 			for plugin in cm.plugins:
 				if plugin.class_name==lesson:
 					if plugin.type=="python":
@@ -13,7 +12,7 @@ class LessonManager:
 						ret=""
 						for line in lines:
 							ret+=line
-						print 2
+						
 						plugin_info={}
 						
 						plugin_info["path"]=plugin.path
@@ -52,12 +51,11 @@ class LessonManager:
 								plugin_info[x]=""
 						
 						
-						
 						return (plugin_info,ret)
-			print 4
+			
 			return False
 		except Exception as e:
-			print e
+			print(e)
 			
 		return False
 		

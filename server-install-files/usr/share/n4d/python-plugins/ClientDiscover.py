@@ -11,6 +11,7 @@ class ClientDiscover:
 	#def init
 	
 	def ping(self,ip_range):
+		
 		self.ip_list=[]
 		ip1,ip2=ip_range
 		min=int(ip1.split(".")[len(ip1.split("."))-1])
@@ -64,16 +65,16 @@ if __name__=="__main__":
 		try:
 			server = ServerProxy ("https://" + item + ":9779")
 			server.get_methods()
-			print "[*] ======================================== [*]"
-			print "[*] " + item + " seems to be a Lliurex system  [*]"
+			print("[*] ======================================== [*]")
+			print("[*] " + item + " seems to be a Lliurex system  [*]")
 			try:
 				ret=server.lliurex_version("","LliurexVersion")
 				if type(ret)!=type(""):
-					print "\t" + ret[1]
-				print "[*] ======================================== [*]"	
-				print ""
+					print("\t" + ret[1])
+				print("[*] ======================================== [*]")
+				print("")
 			except:
-				print "Maybe not... lliurex-version failed"
+				print("Maybe not... lliurex-version failed")
 		except:
 			pass
 			#print "\t\t[!] " + item + " is not a Lliurex system [!]"

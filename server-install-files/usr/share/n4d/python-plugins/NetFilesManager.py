@@ -102,11 +102,11 @@ class NetFilesManager:
 			try:
 				shutil.rmtree(directorypath)
 			except OSError:
-				print "This path is a link"
+				print("This path is a link")
 			except :
 				pass
 		else:
-			print "This path not exist "
+			print("This path does not exist ")
 	#def delete_directory
 	
 	def exist_home_or_create(self,user_info,mode=0):

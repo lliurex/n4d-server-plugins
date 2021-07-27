@@ -54,7 +54,7 @@ class Golem:
 			'''
 			
 		except Exception as e:
-			print e
+			print(e)
 		
 	#def __init__
 	
@@ -102,7 +102,7 @@ class Golem:
 					notifier.read_events()
 				
 			except Exception as e:
-				print e
+				print(e)
 				notifier.stop()
 					
 		return False
@@ -816,7 +816,7 @@ class Golem:
 						
 			
 		except Exception as e:
-			print e
+			print(e)
 			return "false:send_error"
 		if ret==1:
 			try:
@@ -870,7 +870,7 @@ class Golem:
 		try:
 			self.sharefunctions['generate_uid'] = generate_uid
 		except Exception as e:
-			print e
+			print(e)
 			raise e
 
 		ret,users_added=self.itaca.full_import()
@@ -1005,6 +1005,10 @@ class Golem:
 				else:
 					exported_groups[item["cn"][0]]["members"]=[]
 				exported_groups[item["cn"][0]]["description"]=item["description"][0]
+				if "x-lliurex-grouptype" in item:
+					exported_groups[item["cn"][0]]["x-lliurex-grouptype"]=item["x-lliurex-grouptype"][0]
+				else:
+					exported_groups[item["cn"][0]]["x-lliurex-grouptype"]="generic"
 				
 			for item in user_list:
 				
@@ -1100,6 +1104,8 @@ class Golem:
 				properties["description"]=exported_info["groups"][group]["description"]
 				properties["cn"]=group
 				print("Adding group %s..."%group)
+				if "x-lliurex-grouptype" not in properties:
+					properties["x-lliurex-grouptype"]="generic"
 				self.add_group(properties)
 				
 			for uidn in sorted(exported_info["users"]):
@@ -1268,7 +1274,7 @@ class Golem:
 							print("Adding user %s to group %s..."%(i,group))
 							self.add_to_group(i,group)
 					except Exception as e:
-						print e
+						print(e)
 						pass
 						
 					
@@ -1286,7 +1292,7 @@ class Golem:
 			return[True,]
 			
 		except Exception as e:
-			print e
+			print(e)
 			return [False,str(e)]
 		
 	#def import_llum_info

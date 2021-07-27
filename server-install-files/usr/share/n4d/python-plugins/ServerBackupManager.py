@@ -177,15 +177,15 @@ class ServerBackupManager:
 						
 			objects["Golem"].restore_groups_folders()
 			#Enable acls and roadmin just in case
-			cmd='/usr/share/n4d-samba/one-shots/add-roadmin-user.py'
-	                exitStatus=os.system(cmd)
-	                objects["SlapdManager"].load_acls()
+			command='/usr/share/n4d-samba/one-shots/add-roadmin-user.py'
+			exitStatus=os.system(command)
+			objects["SlapdManager"].load_acls()
 
 			objects["ZeroServerWizardManager"].end_operations()
 					
 		except Exception as e:
 				
-			print e
+			print(e)
 
 		
 	#def final_operations

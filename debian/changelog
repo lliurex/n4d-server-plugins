@@ -1,3 +1,9 @@
+n4d-server-plugins (0.140) bionic; urgency=medium
+
+  * fixed export/import llum missing x-lliurex-grouptype
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 27 Jul 2021 17:37:45 +0200
+
 n4d-server-plugins (0.139.1) bionic; urgency=medium
 
   * Dummy upgrade

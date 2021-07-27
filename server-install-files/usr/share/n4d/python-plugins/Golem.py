@@ -1036,6 +1036,10 @@ class Golem:
 				else:
 					exported_groups[item["cn"][0]]["members"]=[]
 				exported_groups[item["cn"][0]]["description"]=item["description"][0]
+				if "x-lliurex-grouptype" in item:
+					exported_groups[item["cn"][0]]["x-lliurex-grouptype"]=item["x-lliurex-grouptype"][0]
+				else:
+					exported_groups[item["cn"][0]]["x-lliurex-grouptype"]="generic"
 		
 			for item in user_list:
 				
@@ -1132,6 +1136,8 @@ class Golem:
 				properties["description"]=exported_info["groups"][group]["description"]
 				properties["cn"]=group
 				print("Adding group %s..."%group)
+				if "x-lliurex-grouptype" not in properties:
+					properties["x-lliurex-grouptype"]="generic"
 				self.add_group(properties)
 				
 			for uidn in sorted(exported_info["users"]):

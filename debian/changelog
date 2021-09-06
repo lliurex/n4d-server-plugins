@@ -1,3 +1,9 @@
+n4d-server-plugins (0.220) focal; urgency=medium
+
+  * Fixed TeacherShareManager
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 06 Sep 2021 11:54:47 +0200
+
 n4d-server-plugins (0.219) focal; urgency=medium
 
   * Old bug. x-lliurex-grouptype is missing from llum exportation

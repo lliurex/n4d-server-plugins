@@ -28,7 +28,7 @@ class TeacherShareManager:
 		
 	#def remove_path
 	
-	def add_path(self,user,path,name,ip,port):
+	def add_path(self,user,path,name,ip,port=None):
 				
 		tmp=tempfile.mkdtemp()
 		#path=path.encode("utf8")

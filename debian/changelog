@@ -1,3 +1,11 @@
+n4d-server-plugins (0.221) focal; urgency=medium
+
+  * teachersharemanager.register_path port is defaulted to None. It's not used
+    anymore. Since this project will be rewritten in the future, we will not
+    spend more time fixing old code.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 06 Sep 2021 12:28:09 +0200
+
 n4d-server-plugins (0.220) focal; urgency=medium
 
   * Fixed TeacherShareManager

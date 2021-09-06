@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-import os.path
-import base64
 import shutil
 import pwd
 import tempfile
 
 import n4d.responses
-
-
-NET_FOLDER="/net/server-sync/home/.lliurex-harvester/"
-
 
 
 class TeacherShareManager:
@@ -25,16 +19,11 @@ class TeacherShareManager:
 	#def __init__
 	
 	def remove_path(self,uid):
+		
 		if uid in self.paths:
 			path,name,ip,port,tmppath=self.paths[uid]
 			self.paths.pop(uid)
-			'''
-			try:
-				shutil.rmtree(tmp+"."+uid+"_"+name)
-			except Exception as e:
-				print e
-			'''
-					
+
 		return n4d.responses.build_successful_call_response()
 		
 	#def remove_path
@@ -42,9 +31,8 @@ class TeacherShareManager:
 	def add_path(self,user,path,name,ip,port):
 				
 		tmp=tempfile.mkdtemp()
-		path=path.encode("utf8")
-		name=name.encode("utf8")
-		
+		#path=path.encode("utf8")
+		#name=name.encode("utf8")
 		dir=tmp+"/."+user+"_"+name
 		
 		if user in self.paths:

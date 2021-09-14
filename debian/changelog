@@ -1,6 +1,15 @@
+n4d-server-plugins (0.223) focal; urgency=medium
+
+  * fixed teachersharemanager.is_configured
+  * fixed teachersharemanager.add_path ip guess. if it is configured on
+    server, address n4d gets is 127.0.0.1. Clients need to know network IP.
+    If 127.0.0.1, service registers 'server'.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 14 Sep 2021 13:07:09 +0200
+
 n4d-server-plugins (0.222) focal; urgency=medium
 
-  * Removed tmp paths no longer used
+  * TeacherShareManager: Removed tmp paths no longer used
   * [Enrique Medina] ]Enabled TeacherSharedManager to guess both user and ip
     address
 

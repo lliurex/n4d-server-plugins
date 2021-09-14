@@ -35,7 +35,7 @@ class TeacherShareManager:
 		try:
 			if ip=="127.0.0.1":
 				ip="server"
-			self.paths[user]=(user,path,name,ip,port)
+			self.paths[user]=(path,name,ip,port)
 			return n4d.responses.build_successful_call_response()
 			
 		except Exception as e:
@@ -53,7 +53,7 @@ class TeacherShareManager:
 		
 		if user in self.paths:
 			
-			user,path,name,ip,port=self.paths[user]
+			path,name,ip,port=self.paths[user]
 			orig_path=orig_path.rstrip("/")
 			path=path.rstrip("/")
 			if path==orig_path:

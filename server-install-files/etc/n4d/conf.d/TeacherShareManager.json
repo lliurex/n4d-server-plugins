@@ -9,22 +9,26 @@
             "allowed_groups": [
                 "sudo",
                 "admins",
-		"teachers"
-            ]
+                "teachers"
+            ],
+            "protected_user" : 0
         },
         "add_path": {
             "allowed_groups": [
                 "sudo",
                 "admins",
-		"teachers"
-            ]
+                "teachers"
+            ],
+            "protected_user" : 0,
+            "protected_ip" : 3
         },
         "is_configured": {
             "allowed_groups": [
                 "sudo",
                 "admins",
-		"teachers"
-            ]
+                "teachers"
+            ],
+            "protected_user" : 0
         },
         "clear_paths": {
             "allowed_groups": [

@@ -18,11 +18,10 @@ class TeacherShareManager:
 		
 	#def __init__
 	
-	def remove_path(self,uid):
+	def remove_path(self,user):
 		
-		if uid in self.paths:
-			path,name,ip,port,tmppath=self.paths[uid]
-			self.paths.pop(uid)
+		if user in self.paths:
+			self.paths.pop(user)
 
 		return n4d.responses.build_successful_call_response()
 		
@@ -73,7 +72,7 @@ class TeacherShareManager:
 			
 			return n4d.responses.build_failed_call_response(ADD_PATH_ERROR,str(e))
 		
-	#def add_user
+	#def add_path
 	
 	def is_configured(self,user,orig_path):
 		

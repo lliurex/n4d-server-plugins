@@ -1,3 +1,9 @@
+n4d-server-plugins (0.225) focal; urgency=medium
+
+  * moving homework harvester plugin to its own package
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 20 Sep 2021 09:42:43 +0200
+
 n4d-server-plugins (0.224) focal; urgency=medium
 
   * TeacherShareManager: removed user from self.paths tuple. not needed

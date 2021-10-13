@@ -116,8 +116,14 @@ class LdapUser:
 
 
 
-def strip_accents(s):
-	return ''.join((c for c in unicodedata.normalize('NFKD', s) if unicodedata.category(c) != 'Mn'))
+def strip_accents(s,remove_apostrophe=True):
+	
+	ret=''.join((c for c in unicodedata.normalize('NFKD', s) if unicodedata.category(c) != 'Mn'))
+	if remove_apostrophe:
+		ret=ret.replace("'","")
+	return ret
+	
+#def strip_accents
 
 
 def ldapmanager_connect(f):

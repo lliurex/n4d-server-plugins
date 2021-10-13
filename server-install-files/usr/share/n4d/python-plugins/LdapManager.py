@@ -107,11 +107,6 @@ class LdapUser:
 #class LdapUSer
 
 
-
-def strip_accents(s):
-	return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
-
-
 def ldapmanager_connect(f):
 	def wrap(*args,**kw):
 		args[0].connect()
@@ -187,7 +182,6 @@ class LdapManager:
 			self.connection=False
 
 	#def init
-	
 
 
 	def reset_connection_variable(self):

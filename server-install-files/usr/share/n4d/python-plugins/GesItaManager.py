@@ -219,6 +219,19 @@ class GesItaManager:
 			filter = "(&(cn="+user.attributes['nom']+")(sn="+user.attributes['cognoms']+"))"
 			listuser = self.golem.ldap.search_user_with_filter(filter)
 			typefilter = "name and surname"
+			
+		# lets try to search withouth utf-8 chars, but keeping apostrophes
+		#self.golem.ldap.strip_accents(something,False)
+		if len(listuser) == 0:
+			try:
+				name=strip_accents(user.attributes['nom'],False)
+				surname=strip_accents(user.attributes['cognoms'],False)
+				filter = "(&(cn="+name+")(sn="+surname+"))"
+				listuser = self.golem.ldap.search_user_with_filter(filter)
+				typefilter = "name and surname"
+			except:
+				pass
+		
 		
 		if len(listuser) == 0:
 		

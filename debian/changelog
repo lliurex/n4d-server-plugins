@@ -1,3 +1,10 @@
+n4d-server-plugins (0.141) bionic; urgency=medium
+
+  * Removing apostrophes from uids.
+  * Trying another way of finding if a user already exists in the system
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 14 Oct 2021 10:22:48 +0200
+
 n4d-server-plugins (0.140) bionic; urgency=medium
 
   * fixed export/import llum missing x-lliurex-grouptype

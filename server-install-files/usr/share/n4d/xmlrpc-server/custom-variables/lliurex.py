@@ -23,10 +23,15 @@ def getLliurexVariables():
 # getLliurexVariables
 
 
-def strip_accents(s):
+def strip_accents(s,remove_apostrophe=True):
+	
 	if type(s)!=type(unicode()):
 		s=unicode(s,'utf-8')
-	return unicodedata.normalize('NFKD',s).encode('ascii','ignore')
+		
+	ret=''.join((c for c in unicodedata.normalize('NFKD', s) if unicodedata.category(c) != 'Mn'))
+	if remove_apostrophe:
+		ret=ret.replace("'","")
+	return ret
 		
 		
 def generate_uid(name,surname):

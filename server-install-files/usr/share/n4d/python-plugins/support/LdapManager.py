@@ -116,8 +116,7 @@ class LdapUser:
 
 
 
-def strip_accents(s):
-	return ''.join((c for c in unicodedata.normalize('NFKD', s) if unicodedata.category(c) != 'Mn'))
+
 
 
 def ldapmanager_connect(f):
@@ -228,6 +227,14 @@ class LdapManager:
 		
 	#def llxvar
 
+	def strip_accents(self,s,remove_apostrophe=True):
+		
+		ret=''.join((c for c in unicodedata.normalize('NFKD', s) if unicodedata.category(c) != 'Mn'))
+		if remove_apostrophe:
+			ret=ret.replace("'","")
+		return ret
+		
+	#def strip_accents
 
 	def reset_connection_variable(self):
 		
@@ -447,7 +454,7 @@ class LdapManager:
 			if len(uid)==6:
 				break
 			
-		return strip_accents(uid).lower()
+		return self.strip_accents(uid).lower()
 		
 		
 	#def generateUid
@@ -507,9 +514,9 @@ class LdapManager:
 				name_utf_encoded=False
 				surname_utf_encoded=False
 				
-				name=strip_accents(unicode(student.attributes["nom"])).lower()
+				name=self.strip_accents(unicode(student.attributes["nom"])).lower()
 				name=unicode(name).encode("ascii")
-				surname=strip_accents(unicode(student.attributes["cognoms"])).lower()
+				surname=self.strip_accents(unicode(student.attributes["cognoms"])).lower()
 				surname=unicode(surname).encode("ascii")
 				
 				# // Generate uid

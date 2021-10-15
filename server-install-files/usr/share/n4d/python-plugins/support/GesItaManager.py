@@ -224,7 +224,6 @@ class GesItaManager:
 			typefilter = "name and surname"
 			
 		# lets try to search withouth utf-8 chars, but keeping apostrophes
-		#self.golem.ldap.strip_accents(something,False)
 		if len(listuser) == 0:
 			try:
 				name=self.golem.ldap.strip_accents(user.attributes['nom'],False)

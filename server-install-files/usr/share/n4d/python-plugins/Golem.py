@@ -1135,7 +1135,7 @@ class Golem:
 				properties={}
 				properties["description"]=exported_info["groups"][group]["description"]
 				properties["cn"]=group
-				print("Adding group %s..."%group)
+				#print("Adding group %s..."%group)
 				if "x-lliurex-grouptype" not in properties:
 					properties["x-lliurex-grouptype"]="generic"
 				self.add_group(properties)
@@ -1148,7 +1148,7 @@ class Golem:
 					uids[key]=int(self.ldap.xid_counters[key])
 
 				properties={}
-				properties["uid"]=user
+				properties["uid"]=self.ldap.strip_accents(user)
 				properties["cn"]=exported_info["users"][uidn]["cn"]
 				properties["sn"]=exported_info["users"][uidn]["sn"]
 				properties["userPassword"]=exported_info["users"][uidn]["userPassword"]
@@ -1182,7 +1182,7 @@ class Golem:
 				#print("Adding user %s..."%user)
 				ret=self.add_user(profile,properties)
 				
-				if "true" in str(ret):
+				if ret["status"]==0 and "true" in ret["return"]:
 					if "uidNumber" in properties:
 						if int(uids[profile]) < int(properties["uidNumber"]):
 							uids[profile]=int(properties["uidNumber"])
@@ -1206,7 +1206,7 @@ class Golem:
 			for user in exported_info["skipped_users"]:
 				
 				properties={}
-				properties["uid"]=user
+				properties["uid"]=self.ldap.strip_accents(user)
 				properties["cn"]=exported_info["skipped_users"][user]["cn"]
 				properties["sn"]=exported_info["skipped_users"][user]["sn"]
 				properties["userPassword"]=exported_info["skipped_users"][user]["userPassword"]
@@ -1223,7 +1223,7 @@ class Golem:
 				#print("Trying to add skipped.1 user %s..."%user)
 				ret=self.add_user(profile,properties)
 				
-				if "true" in str(ret):
+				if ret["status"]==0 and "true" in ret["return"]:
 
 					if profile=="Teachers":
 						if "known_password" in exported_info["skipped_users"][user]:
@@ -1247,7 +1247,7 @@ class Golem:
 
 			for uidn in skipped_uidn:
 				
-				user=exported_info["users"][uidn]["uid"]
+				user=self.ldap.strip_accents(exported_info["users"][uidn]["uid"])
 				
 				properties={}
 				properties["uid"]=user
@@ -1272,7 +1272,7 @@ class Golem:
 				#print("Trying to add skipped.2 user %s..."%user)
 				ret=self.add_user(profile,properties)
 
-				if "true" in str(ret):
+				if ret["status"]==0 and "true" in ret["return"]:
 					'''
 					if "uidNumber" in properties:
 						if uids[profile] < int(properties["uidNumber"]):
@@ -1304,7 +1304,7 @@ class Golem:
 					try:
 						if i not in skipped:
 							#print("Adding user %s to group %s..."%(i,group))
-							self.add_to_group(i,group)
+							self.add_to_group(self.ldap.strip_accents(i),group)
 					except Exception as e:
 						print(e)
 						pass
@@ -1313,6 +1313,7 @@ class Golem:
 			for uidn in exported_info["users"]:
 				
 				if exported_info["users"][uidn]["is_admin"]:
+					user=self.ldap.strip_accents(exported_info["users"][uidn]["uid"])
 					self.add_teacher_to_admins(user)
 					
 			for user in exported_info["skipped_users"]:

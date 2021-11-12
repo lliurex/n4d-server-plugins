@@ -1110,7 +1110,7 @@ class Golem:
 				
 			for uidn in sorted(exported_info["users"]):
 
-				user=exported_info["users"][uidn]["uid"]
+				user=strip_accents(exported_info["users"][uidn]["uid"])
 				uids={}
 				for key in self.ldap.xid_counters:
 					uids[key]=int(self.ldap.xid_counters[key])
@@ -1174,7 +1174,7 @@ class Golem:
 			for user in exported_info["skipped_users"]:
 				
 				properties={}
-				properties["uid"]=user
+				properties["uid"]=strip_accents(user)
 				properties["cn"]=exported_info["skipped_users"][user]["cn"]
 				properties["sn"]=exported_info["skipped_users"][user]["sn"]
 				properties["userPassword"]=exported_info["skipped_users"][user]["userPassword"]
@@ -1215,7 +1215,7 @@ class Golem:
 
 			for uidn in skipped_uidn:
 				
-				user=exported_info["users"][uidn]["uid"]
+				user=strip_accents(exported_info["users"][uidn]["uid"])
 				
 				properties={}
 				properties["uid"]=user
@@ -1272,7 +1272,7 @@ class Golem:
 					try:
 						if i not in skipped:
 							print("Adding user %s to group %s..."%(i,group))
-							self.add_to_group(i,group)
+							self.add_to_group(strip_accents(i),group)
 					except Exception as e:
 						print(e)
 						pass
@@ -1281,12 +1281,13 @@ class Golem:
 			for uidn in exported_info["users"]:
 				
 				if exported_info["users"][uidn]["is_admin"]:
+					user=strip_accents(exported_info["users"][uidn]["uid"])
 					self.add_teacher_to_admins(user)
 					
 			for user in exported_info["skipped_users"]:
 				
 				if exported_info["skipped_users"][user]["is_admin"]:
-					self.add_teacher_to_admins(user)
+					self.add_teacher_to_admins(strip_accents(user))
 					
 					
 			return[True,]

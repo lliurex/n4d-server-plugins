@@ -1,3 +1,9 @@
+n4d-server-plugins (0.142) bionic; urgency=medium
+
+  * Removing apostrophes from old exported llum files
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 12 Nov 2021 11:45:41 +0100
+
 n4d-server-plugins (0.141) bionic; urgency=medium
 
   * Removing apostrophes from uids.

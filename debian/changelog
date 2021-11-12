@@ -1,3 +1,9 @@
+n4d-server-plugins (0.227) focal; urgency=medium
+
+  * Removing apostrophes from old exported llum files
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 12 Nov 2021 10:56:20 +0100
+
 n4d-server-plugins (0.226) focal; urgency=medium
 
   * Removing apostrophes from user name and or surnames

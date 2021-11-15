@@ -178,7 +178,7 @@ class PasswordManager:
 	
 	def is_user_in_database(self,uid):
 		
-		for user in self.users:
+		if user in self.users:
 			return True
 			
 		return False

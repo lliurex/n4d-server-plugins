@@ -1,3 +1,9 @@
+n4d-server-plugins (0.228) focal; urgency=medium
+
+  * Fixed is_user_in_database
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 15 Nov 2021 12:43:15 +0100
+
 n4d-server-plugins (0.227) focal; urgency=medium
 
   * Removing apostrophes from old exported llum files

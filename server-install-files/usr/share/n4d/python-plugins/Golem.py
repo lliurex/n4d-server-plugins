@@ -601,10 +601,6 @@ class Golem:
 					self.pw.add_password(uid,cn,sn,password)
 			else:
 				self.pw.set_externally_modified(uid)
-			
-		if not auto:
-			if "Teachers" in path:
-				self.pw.set_externally_modified(uid)
 		
 		return result
 		

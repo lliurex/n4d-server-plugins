@@ -606,11 +606,11 @@ class Golem:
 		
 		#return=="true"
 		
-		if uid!="" and cn!="" and sn!="":
-			self.pw.add_password(uid,cn,sn,password)
-			
-		if not auto:
-			if "Teachers" in path:
+		if "Teachers" in path:
+			if auto:
+				if uid!="" and cn!="" and sn!="":
+					self.pw.add_password(uid,cn,sn,password)
+			else:
 				self.pw.set_externally_modified(uid)
 		
 		return n4d.responses.build_successful_call_response(result)

@@ -181,7 +181,7 @@ class PasswordManager:
 	
 	def is_user_in_database(self,uid):
 		
-		for user in self.users:
+		if user in self.users:
 			return True
 			
 		return False
@@ -191,8 +191,7 @@ class PasswordManager:
 	
 	def set_externally_modified(self,uid):
 		
-		if self.is_user_in_database(uid):
-			self.add_password(uid,self.users[uid]["cn"],self.users[uid]["sn"],"#! CHANGED MANUALLY !#")
+		self.add_password(uid,self.users[uid]["cn"],self.users[uid]["sn"],"#! CHANGED MANUALLY !#")
 			
 	#def set_externally_modified	
 	

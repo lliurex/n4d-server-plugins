@@ -1,3 +1,9 @@
+n4d-server-plugins (0.143.1) bionic; urgency=medium
+
+  * minor syntax error
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 15 Nov 2021 13:06:24 +0100
+
 n4d-server-plugins (0.143) bionic; urgency=medium
 
   * Fixed set_externally_modified password function

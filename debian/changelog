@@ -1,3 +1,9 @@
+n4d-server-plugins (0.143) bionic; urgency=medium
+
+  * Fixed set_externally_modified password function
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 15 Nov 2021 12:30:59 +0100
+
 n4d-server-plugins (0.142) bionic; urgency=medium
 
   * Removing apostrophes from old exported llum files

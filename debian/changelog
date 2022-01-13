@@ -1,3 +1,9 @@
+n4d-server-plugins (0.228.2) focal; urgency=medium
+
+  * fixed variable name
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 13 Jan 2022 09:35:39 +0100
+
 n4d-server-plugins (0.228.1) focal; urgency=medium
 
   * minor syntax error

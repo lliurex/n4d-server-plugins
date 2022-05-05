@@ -1,3 +1,10 @@
+n4d-server-plugins (0.228.3) focal; urgency=medium
+
+  * Fixed info sent back to llum when importing itaca file. bytes need utf8
+    decoding
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Thu, 05 May 2022 10:06:55 +0200
+
 n4d-server-plugins (0.228.2) focal; urgency=medium
 
   * fixed variable name

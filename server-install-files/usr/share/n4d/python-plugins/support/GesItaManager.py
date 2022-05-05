@@ -151,6 +151,18 @@ class GesItaManager:
 		self.users_added = []
 		try:
 			self.usersfordelete = self.golem.ldap.search_user_with_filter(filter)
+			for user in self.usersfordelete:
+				if type(self.usersfordelete[user]["cn"])==bytes:
+					self.usersfordelete[user]["cn"]=self.usersfordelete[user]["cn"].decode("utf-8")
+				if type(self.usersfordelete[user]["sn"])==bytes:
+					self.usersfordelete[user]["sn"]=self.usersfordelete[user]["sn"].decode("utf-8")
+				if type(self.usersfordelete[user]["uidNumber"])==bytes:
+					self.usersfordelete[user]["uidNumber"]=self.usersfordelete[user]["uidNumber"].decode("utf-8")
+				if type(self.usersfordelete[user]["uid"])==bytes:
+					self.usersfordelete[user]["uid"]=self.usersfordelete[user]["uid"].decode("utf-8")
+				if type(self.usersfordelete[user]["profile"])==bytes:
+					self.usersfordelete[user]["profile"]=self.usersfordelete[user]["profile"].decode("utf-8")
+			
 		except Exception as e:
 			print(e)
 			raise e
@@ -189,7 +201,8 @@ class GesItaManager:
 		
 		for user in self.users_added:
 			user['group_type'] = user['profile'].capitalize()
-
+		
+		
 		return self.usersfordelete,self.users_added
 	#def full_import
 		

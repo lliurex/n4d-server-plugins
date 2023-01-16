@@ -995,7 +995,7 @@ class Golem:
 		ret=[]
 		try:
 			
-			for item in self.get_available_groups():
+			for item in self.ldap.get_available_groups():
 				try:
 					id=self.create_group_folder(item["cn"][0])["return"]
 					ret.append((item["cn"][0],id))

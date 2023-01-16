@@ -438,8 +438,8 @@ class LdapManager:
 	
 	def generate_uid(self,name,surname):
 		
-		name_list=name.split(" ")
-		surname_list=surname.split(" ")
+		name_list=name.replace("\n","").split(" ")
+		surname_list=surname.replace("\n","").split(" ")
 		
 		uid=""
 		

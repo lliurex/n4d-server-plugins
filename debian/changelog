@@ -1,3 +1,10 @@
+n4d-server-plugins (0.229) focal; urgency=medium
+
+  * Fixed group folders creation
+  * Removing breaklines from name or surname when importing ITACA users
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 16 Jan 2023 10:59:50 +0100
+
 n4d-server-plugins (0.228.3) focal; urgency=medium
 
   * Fixed info sent back to llum when importing itaca file. bytes need utf8

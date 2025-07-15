@@ -1,3 +1,10 @@
+n4d-server-plugins (0.230) jammy; urgency=medium
+
+  * IptablesManager to an independent package which is now dependend by this
+    one.
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 15 Jul 2025 11:18:35 +0200
+
 n4d-server-plugins (0.229.23) jammy; urgency=medium
 
   * First jammy release 

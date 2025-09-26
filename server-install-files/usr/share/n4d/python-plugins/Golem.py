@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-import imp
+# Deprecated for noble replacement
+# import imp
+import importlib.util
 import ldap
 import sys
 import subprocess
@@ -29,19 +31,30 @@ class Golem:
 		self.core=n4d.server.core.Core.get_core()
 		
 	#def init
-	
+
+	def load_source(self,name,path):
+		if not name:
+			return None
+		spec = importlib.util.spec_from_file_location(name,path)
+		if not spec:
+			return None
+		mod = importlib.util.module_from_spec(spec)
+		sys.modules[name] = mod
+		spec.loader.exec_module(mod)
+		return mod
+
 	def startup(self,options):
 		
 		
 		try:
 			self.mime=magic.open(magic.MAGIC_MIME)
 			self.mime.load()
-			self.obj=imp.load_source("LdapManager",Golem.SUPPORT_PATH + "LdapManager.py")
-			obj3=imp.load_source("NetFilesManager",Golem.SUPPORT_PATH + "NetFilesManager.py")
-			obj4=imp.load_source("PasswordManager",Golem.SUPPORT_PATH + "PasswordManager.py")
-			obj5=imp.load_source("GesItaManager",Golem.SUPPORT_PATH + "GesItaManager.py")
-			obj6=imp.load_source("FileOperations",Golem.SUPPORT_PATH + "FileOperations.py")
-			obj7=imp.load_source("PeterPan",Golem.SUPPORT_PATH + "PeterPan.py")
+			self.obj=self.load_source("LdapManager",Golem.SUPPORT_PATH + "LdapManager.py")
+			obj3=self.load_source("NetFilesManager",Golem.SUPPORT_PATH + "NetFilesManager.py")
+			obj4=self.load_source("PasswordManager",Golem.SUPPORT_PATH + "PasswordManager.py")
+			obj5=self.load_source("GesItaManager",Golem.SUPPORT_PATH + "GesItaManager.py")
+			obj6=self.load_source("FileOperations",Golem.SUPPORT_PATH + "FileOperations.py")
+			obj7=self.load_source("PeterPan",Golem.SUPPORT_PATH + "PeterPan.py")
 			self.ldap=self.obj.LdapManager()
 			self.netfiles=obj3.NetFilesManager()
 			self.pw=obj4.PasswordManager()

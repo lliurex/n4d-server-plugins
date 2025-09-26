@@ -10,6 +10,6 @@ Vcs-Git: https://github.com/lliurex/n4d-server-plugins.git
 Package: n4d-server-plugins
 Architecture: all
 Pre-Depends: n4d (>0.900)
-Depends: ${shlibs:Depends}, ${misc:Depends}, python3, python3-ldap, n4d-iptablesmanager
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3, python3-ldap, n4d-iptablesmanager, python3-passlib
 Description: n4d server plugins
  This package contains n4d plugins for lliurex servers 

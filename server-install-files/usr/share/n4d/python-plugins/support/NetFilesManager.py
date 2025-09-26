@@ -6,9 +6,13 @@ import grp
 import pwd
 import pipes
 import time
-import imp 
+# Deprecated
+#import imp 
+import importlib.util
 
 import n4d.server.core
+
+
 
 class NetFilesManager:
 	
@@ -31,6 +35,17 @@ class NetFilesManager:
 		self.home_acls.append("-m u:%s:rwx")
 		
 		self.check_main_folder()
+
+	def load_source(self,name,path):
+		if not name:
+			return None
+		spec = importlib.util.spec_from_file_location(name,path)
+		if not spec:
+			return None
+		mod = importlib.util.module_from_spec(spec)
+		sys.modules[name] = mod
+		spec.loader.exec_module(mod)
+		return mod
 
 	def startup(self,options):
 		

@@ -181,6 +181,7 @@ class LdapManager:
 		self.core=n4d.server.core.Core.get_core()
 		self.core.pprint("GOLEM.LDAPMANAGER","INIT")
 		#self.llxvar=llxvar
+		self.samba_thread=threading.Thread()
 		self.restore_connection=True
 		self.reset_connection_variable()
 		self.get_samba_id()
@@ -378,9 +379,9 @@ class LdapManager:
 
 		self.samba_id=None
 		self.get_samba_id_first_run=False
-		t=threading.Thread(target=self.get_samba_id_t)
-		t.daemon=True
-		t.start()
+		self.samba_thread=threading.Thread(target=self.get_samba_id_t)
+		self.samba_thread.daemon=True
+		self.samba_thread.start()
 		
 	#def get_samba_id
 	
@@ -567,6 +568,12 @@ class LdapManager:
 	
 	
 	def connect(self):
+
+		timeout=0
+		while self.samba_thread.is_alive():
+			self.core.pprint("GOLEM.LDAPMANAGER",".connect Waiting for samba_thread")
+			if timeout <15 :
+				time.sleep(2)
 	
 		if self.get_samba_id_first_run and self.samba_id==None:
 			# Calling blocking call instead of thread
@@ -574,7 +581,7 @@ class LdapManager:
 		
 		if self.restore_connection:
 			self.restore_connection=False
-			sys.stdout.write("[GOLEM.LDAPMANAGER] Connecting to ldap ... ")
+			self.core.pprint("GOLEM.LDAPMANAGER",".connect Connecting to ldap ... ")
 			url=None
 			remote=False
 			try:
@@ -600,7 +607,7 @@ class LdapManager:
 			else:
 				count=2
 			
-			for x in range(0,count):
+			for x in range(0,10):
 			
 				try:
 				
@@ -628,7 +635,7 @@ class LdapManager:
 						#path="uid=pepe,ou=Admins,ou=People,dc=ma5,dc=lliurex,dc=net"
 					
 					self.ldap.bind_s(path,password)
-					print("OK")
+					self.core.pprint("GOLEM.LDAPMANAGER",".connect Connection to ldap successful ")
 					
 					return True
 					
@@ -640,6 +647,10 @@ class LdapManager:
 					except Exception as e:
 						print((e,""))
 						return None
+					self.core.pprint("GOLEM.LDAPMANAGER","connect Failed to connect ldap. Sleeping...")
+						
+					time.sleep(2)
+					
 			self.core.pprint("GOLEM.LDAPMANAGER","Error connecting to ldap")			
 			
 		

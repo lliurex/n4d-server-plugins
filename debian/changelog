@@ -1,3 +1,10 @@
+n4d-server-plugins (0.231) jammy; urgency=medium
+
+  * Added samba id read and ldap connection retries on first boot.
+  * n4d-ldap to PreDepends and forcing a dnsmasq restart in postinst 
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 23 Jan 2026 15:36:20 +0100
+
 n4d-server-plugins (0.230) jammy; urgency=medium
 
   * IptablesManager to an independent package which is now dependend by this
